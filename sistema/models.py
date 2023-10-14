@@ -45,10 +45,10 @@ class Dueno(models.Model):
     email = models.CharField(max_length=254,null=True)
 
 class Estacionamiento(models.Model):
-    ubicacion = models.CharField(max_length=200)
+    dirección = models.CharField(max_length=200)
     capacidad = models.IntegerField()
     dueño_id = models.ForeignKey(Dueno, on_delete=models.CASCADE)
-
+    comuna_id = models.ForeignKey(Comuna, on_delete=models.CASCADE)
 
 class Arrendamiento(models.Model):
     cliente_id = models.ForeignKey(Cliente, on_delete=models.CASCADE)

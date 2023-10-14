@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PARKING RENT</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+
+</head>
+<body>
+    <h1>Resultados de Búsqueda</h1>
+
+    {% if results %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Comuna</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <!-- Agrega otros encabezados de columna si es necesario -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.communa }}</td>
+                        <td>{{ result.fecha_inicio }}</td>
+                        <td>{{ result.hora_inicio }}</td>
+                        <!-- Muestra otros datos del estacionamiento según tu modelo -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No se encontraron resultados.</p>
+    {% endif}
+
+    <a href="{% url 'index' %}">Volver al formulario de búsqueda</a>
+</body>
+</html>
