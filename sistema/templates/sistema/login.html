@@ -6,21 +6,31 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GRUPO CERO</title>
-  <link rel="stylesheet" href="{% static 'css/sistema/style.css' %}">
+  <title>PARKING RENT</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 
 </head>
 
-<form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="id_username">Nombre de usuario:</label>
-        {{ form.username }}
-    </div>
-    <div class="form-group">
-        <label for="id_password">Contraseña:</label>
-        {{ form.password }}
-    </div>
-    <input type="hidden" name="user_type" value="{{ user_type }}">
-    <button type="submit">Iniciar sesión</button>
-</form>
+<div class="login bg-light rounded shadow-sm">
+    <form action="" method="post">
+
+      {% csrf_token %}
+
+
+      <div class="mb-3">
+        <input type="email" class="form-control validarEmail" id="{{ form.correo.id_for_label }}" placeholder="Correo"
+          aria-describedby="emailHelp" name="{{ form.correo.html_name }}">
+        <p id="resultApi"></p>
+      </div>
+
+      <div class="mb-3">
+        <input maxlength="8" minlength="8" type="password" class="form-control" id="{{ form.clave.id_for_label }}"
+          placeholder="Ingresa tu Contraseña, 8 caracteres mayusculas, minuscula y números"
+          name="{{ form.clave.html_name }}" required pattern="[a-zA-Z]+[0-9]+">
+      </div>
+
+      <button class="btn btn-secondary" type="submit">Log In</button>
+    </form>
+  </div>
+</body>
