@@ -3,10 +3,17 @@ from django.conf import settings
 from django.db import models
 
 class CustomUser(AbstractServer):
-    cliente = models.BooleanField(default=False)
-    dueno = models.BooleanField(default=False)
-    admin = models.BooleanField(default=False)
-
+    USER_TYPE_CHOICES = [
+        ('cliente', 'Cliente'),
+        ('dueno', 'Dueño'),
+        ('admin', 'Admin'),
+    ]
+    
+    user_type = models.CharField(
+        max_length=10,
+        choices=USER_TYPE_CHOICES,
+        default='cliente'
+    )
 
 
 class Comuna(models.Model):
