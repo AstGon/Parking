@@ -6,12 +6,12 @@ from django.db.models import Q
 import pytz
 from decimal import Decimal
 
+
 def login(request):
+    error_message = None  # Inicializa la variable error_message
     if request.method == 'POST':
         email = request.POST['email']
         contraseña = request.POST['password']
-        print(contraseña)
-        print(email)
         user = authenticate(request, email=email, password=contraseña)
 
         if user is not None:
@@ -21,13 +21,15 @@ def login(request):
         else:
             # El inicio de sesión ha fallado, puedes mostrar un mensaje de error
             error_message = "El inicio de sesión ha fallado. Verifica tus credenciales."
-            return render(request, 'buscar_estacionamiento/login.html', {'error_message': error_message})
 
     return render(request, 'buscar_estacionamiento/login.html', {'error_message': error_message})
 
 
 def registro_usuario(request):
     return render(request, 'buscar_estacionamiento/registro_usuario.html')
+
+def tipousuario(request):
+    return render(request, 'buscar_estacionamiento/tipousuario.html')
 
 
 def buscar_estacionamiento(request):

@@ -113,3 +113,23 @@ $.ajax({
     }
 });
 });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const rutInput = document.getElementById("rut");
+    const rutError = document.getElementById("rut-error");
+
+    rutInput.addEventListener("input", function() {
+        const rut = rutInput.value.trim();
+        if (validateRut(rut)) {
+            rutError.textContent = "";
+        } else {
+            rutError.textContent = "RUT no válido";
+        }
+    });
+
+    function validateRut(rut) {
+        const rutPattern = /^\d{1,8}-?(\d|k|K)?$/;
+        return rutPattern.test(rut);
+    }
+});
