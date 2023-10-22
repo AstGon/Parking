@@ -4,20 +4,35 @@ from .models import Estacionamiento, Arrendamiento
 from datetime import datetime
 from django.db.models import Q
 import pytz
-from decimal import Decimal
+from django.contrib.auth.backends import ModelBackend
+from .models import Dueno, Cliente
+
+class EmailBackend(ModelBackend):
+    def authenticate(self, request, email=None, password=None, **kwargs):
+        try:
+            # First, try to authenticate as a 'Dueno'
+            dueno = Dueno.objects.get(user__email=email)
+            if dueno.user.check_password(password):
+                return dueno.user
+        except Dueno.DoesNotExist:
+            # If not a 'Dueno', try to authenticate as a 'Cliente'
+            try:
+                cliente = Cliente.objects.get(user__email=email)
+                if cliente.user.check_password(password):
+                    return cliente.user
+            except Cliente.DoesNotExist:
+                return None
+
 
 def login(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
-        print("Email:", email)  # Agrega mensajes de impresión para depurar
-        print("Password:", password)
-        user = authenticate(request, email=email, password=password)
-        print("User:", user)
+        user = EmailBackend().authenticate(request, email=email, password=password)
+        print(user)
 
         if user is not None:
-            login(request, user)
-            print("User logged in successfully")
+            auth_login(request, user)
             return redirect('pagina_de_inicio')
         else:
             error_message = "El inicio de sesión ha fallado. Verifica tus credenciales."
