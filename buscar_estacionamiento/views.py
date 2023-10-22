@@ -4,6 +4,13 @@ from datetime import datetime
 from django.db.models import Q
 import pytz
 
+
+def login(request):
+    return render(request, 'buscar_estacionamiento/login.html')
+
+def registro_usuario(request):
+    return render(request, 'buscar_estacionamiento/registro_usuario.html')
+
 def buscar_estacionamiento(request):
     if request.method == 'POST':
         comuna = request.POST.get('comuna')
@@ -45,3 +52,4 @@ def buscar_estacionamiento(request):
 
 def mostrar_estacionamiento(request):
     return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html')
+

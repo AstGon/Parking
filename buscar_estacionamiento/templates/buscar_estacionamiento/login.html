@@ -1,0 +1,51 @@
+{% extends 'buscar_estacionamiento/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 style="margin-top: 50px; color: #4300BE;">Iniciar Sesión</h2>
+            <form method="post" action="{% url 'login' %}" onsubmit="return validateEmail()">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="email" style="color: #9C88B8;">Correo Electrónico:</label>
+                    <input type="email" id="email" name="email" class="form-control validarEmail" style="background-color: #E5E0EC;" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" style="color: #9C88B8;">Contraseña:</label>
+                    <input type="password" id="password" name="password" class="form-control" style="background-color: #E5E0EC;" required>
+                </div>
+                <div class="form-check" style="margin-top: 20px;" >
+                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe" style="color: #9C88B8;">Recordarme</label>
+                </div>
+                <button type="submit" class="btn" style="margin-top: 20px; background-color: #FFA011; color: #FFFFFF; float: right;">
+                    Iniciar Sesión
+                </button>
+            </form>
+            <div class="dropdown-divider" style="margin-top: 20px;"></div>
+            <a style="color: #9C88B8; font-size: 10px;" class="dropdown-item" href="{% url 'registro_usuario' %}">¿Nuevo por aquí? Regístrate</a>
+            <a style="color: #9C88B8; font-size: 10px;" class="dropdown-item" href="{% url 'registro_usuario' %}">¿Olvidaste tu contraseña?</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateEmail() {
+        var emailInput = document.getElementById('email');
+        var emailValue = emailInput.value;
+        var emailPattern = /^[a-zA-Z0-9._-]+@[a-zAZ.-]+\.[a-zA-Z]{2,4}$/;
+
+        if (!emailPattern.test(emailValue)) {
+            alert('Correo electrónico no válido. Debe tener un formato válido.');
+            emailInput.focus();
+            return false;
+        }
+
+        // Aquí puedes realizar la verificación del dominio del lado del servidor
+        // utilizando una solicitud AJAX para verificar la existencia del dominio.
+
+        return true;
+    }
+</script>
+{% endblock %}
