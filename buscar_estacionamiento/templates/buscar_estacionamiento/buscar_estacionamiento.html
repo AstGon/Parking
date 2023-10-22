@@ -31,6 +31,26 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Buscar Estacionamientos</button>
+            
+            
+            <!-- Futura conexion api localización -->
+            <button onclick="obtenerUbicacion()">Obtener Ubicación</button>
+
+            <script>
+                // Función para obtener la ubicación
+                function obtenerUbicacion() {
+                    if (navigator.geolocation) {
+                        // Obtener la ubicación actual
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            var latitud = position.coords.latitude;
+                            var longitud = position.coords.longitude;
+                            // Aquí puedes enviar las coordenadas al servidor o realizar acciones con ellas.
+                        });
+                    } else {
+                        alert("La geolocalización no es compatible en este navegador.");
+                    }
+                }
+            </script>              
         </form>
     </div>
 {% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'buscar_estacionamiento/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="display-4">Mi Perfil</h1>
+    <div class="mt-3">
+        <a class="btn btn-primary" href="">Editar Perfil</a>
+        <a class="btn btn-primary" href="{% url 'agregar_vehiculo' %}">Agregar Vehículo</a>
+    </div>
+</div>
+{% endblock %}

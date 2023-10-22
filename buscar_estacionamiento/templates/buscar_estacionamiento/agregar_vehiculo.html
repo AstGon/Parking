@@ -1,0 +1,23 @@
+{% extends 'buscar_estacionamiento/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="display-4">Agregar Vehículo</h1>
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="patente">Patente:</label>
+            <input type="text" class="form-control" id="patente" name="patente" required>
+        </div>
+        <div class="form-group">
+            <label for="modelo">Modelo:</label>
+            <input type="text" class="form-control" id="modelo" name="modelo" required>
+        </div>
+        <div class="form-group">
+            <label for="marca">Marca:</label>
+            <input type="text" class="form-control" id="marca" name="marca" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Vehículo</button>
+    </form>
+</div>
+{% endblock %}

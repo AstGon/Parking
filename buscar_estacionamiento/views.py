@@ -45,3 +45,29 @@ def buscar_estacionamiento(request):
 
 def mostrar_estacionamiento(request):
     return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html')
+
+def perfil_usuario(request):
+    return render(request, 'buscar_estacionamiento/perfil.html')
+
+def agregar_vehiculo(request):
+    return render(request, 'buscar_estacionamiento/agregar_vehiculo.html')
+
+
+from django.shortcuts import render, redirect
+from .models import Vehiculo
+
+def guardar_vehiculo(request):
+    if request.method == 'POST':
+        patente = request.POST['patente']
+        modelo = request.POST['modelo']
+        marca = request.POST['marca']
+        
+        vehiculo = Vehiculo(patente=patente, modelo=modelo, marca=marca)
+        vehiculo.save()
+        return redirect('perfil_usuario')
+
+    # Resto de la lógica, si es necesario
+    # debería funcionar cuando se almacene en la bd
+    
+
+    return render(request, 'buscar_estacionamiento/agregar_vehiculo.html')
