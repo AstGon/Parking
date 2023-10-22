@@ -1,0 +1,54 @@
+.navbar {
+    background-color: #4300BE;
+  }
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+  }
+  .navbar-brand img {
+    margin-right: 10px;
+  }
+  .navbar-nav .nav-link {
+    color: white;
+  }
+  
+  .form-control{
+    background-color:  #9C88B8;
+  
+  }
+  .label_registro{
+  
+    color: #9C88B8;
+  }
+  
+  .h2{
+    margin-top: 50px; 
+    color: #4300BE;
+  }
+  .btn{
+    background-color: #FFA011; 
+    color: #FFFFFF;
+  }
+  
+  #password,#email{
+    background-color: #E5E0EC;
+  }
+  
+  
+  .cuadro-costohora {
+    border: 2px solid purple; /* Borde morado */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 5px 10px; /* Espaciado interno */
+    color: purple; /* Texto morado */
+    background-color: transparent; /* Fondo transparente */
+    display: inline-block; /* Para que esté en línea con el botón Reservar */
+  }
+  
+  #footer {
+    background-image: url('/static/buscar_estacionamiento/buscar_estacionamiento/img/edificios.png');
+    /* Puedes ajustar otras propiedades de fondo según tus necesidades */
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* Añade otras propiedades de estilo aquí */
+  }
+  
