@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Estacionamiento, Arrendamiento
 from datetime import datetime
 from django.db.models import Q
 import pytz
+from decimal import Decimal
 
 def buscar_estacionamiento(request):
     if request.method == 'POST':
@@ -17,6 +18,8 @@ def buscar_estacionamiento(request):
 
         fecha_inicio = tz.localize(datetime.strptime(fecha_inicio, '%Y-%m-%d'))
         hora_inicio = tz.localize(datetime.strptime(hora_inicio, '%H:%M'))
+        fecha_fin = tz.localize(datetime.strptime(fecha_fin, '%Y-%m-%d'))
+        hora_fin = tz.localize(datetime.strptime(hora_fin, '%H:%M'))
 
         fecha_inicio_formulario = datetime.combine(fecha_inicio.date(), hora_inicio.time()).astimezone(tz)
 
@@ -25,6 +28,10 @@ def buscar_estacionamiento(request):
 
         # Inicializa la variable estacionamientos_disponibles
         estacionamientos_disponibles = []
+
+        tiempo_transcurrido = fecha_fin - fecha_inicio + (hora_fin - hora_inicio)
+        # Calcula las horas totales
+        horas_totales = tiempo_transcurrido.total_seconds() / 3600
 
         # Comprueba las condiciones de fecha y hora
         if ahora <= fecha_inicio_formulario:
@@ -35,13 +42,36 @@ def buscar_estacionamiento(request):
                     Q(hora_fin__gte=hora_inicio, hora_inicio__lte=hora_fin)
                 ).values('estacionamiento__id')
             ).filter(comuna__comuna=comuna)
+            
+        print(horas_totales)
 
+        # Pasa los valores calculados al contexto
         return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html', {
             'estacionamientos_disponibles': estacionamientos_disponibles,
+            'horas_totales': horas_totales,
         })
 
     return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
 
+def mostrar_estacionamiento(request, estacionamiento_id):
+    if request.method == 'GET':
+        # Busca el estacionamiento seleccionado en la base de datos
+        try:
+            estacionamiento_seleccionado = Estacionamiento.objects.get(id=estacionamiento_id)
+        except Estacionamiento.DoesNotExist:
+            # Maneja el caso si el estacionamiento no se encuentra
+            # Redirige al usuario a una página de error o a donde desees
+            return redirect('pagina_de_error')  # Reemplaza 'pagina_de_error' con la URL deseada
 
-def mostrar_estacionamiento(request):
-    return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html')
+        # Lógica para calcular el precio total
+        costo_por_hora = estacionamiento_seleccionado.costo_por_hora
+        horas_totales = ...  # Debes obtener esto de alguna manera
+        precio_total = costo_por_hora * horas_totales
+        print(precio_total)
+        return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html', {
+            'estacionamiento_seleccionado': estacionamiento_seleccionado,
+            'horas_totales': horas_totales,
+            'precio_total': precio_total,
+        })
+    else:
+        return redirect('pagina_de_error')

@@ -22,15 +22,54 @@
 
             <div class="form-group">
                 <label for="hora_inicio">Hora de Inicio:</label>
-                <input type="time" class="form-control" id="hora_inicio" name="hora_inicio" required>
-            </div>
-
-            <div class="form-group">
+                <select class="form-control" id="hora_inicio" name="hora_inicio" required>
+                  <option value="">Selecciona una hora</option>
+                </select>
+              </div>
+        
+              <div class="form-group">
                 <label for="hora_fin">Hora de Fin:</label>
-                <input type="time" class="form-control" id="hora_fin" name="hora_fin" required>
-            </div>
-
+                <select class="form-control" id="hora_fin" name="hora_fin" required>
+                  <option value="">Selecciona una hora</option>
+                </select>
+              </div>
+            
+            
             <button type="submit" class="btn btn-primary">Buscar Estacionamientos</button>
         </form>
     </div>
+    <script>
+        const selectHoraInicio = document.getElementById('hora_inicio');
+        const selectHoraFin = document.getElementById('hora_fin');
+    
+        for (let hour = 0; hour <= 24; hour++) {
+            const formattedHour = (hour < 10) ? `0${hour}:00` : `${hour}:00`;
+    
+            // Agrega opciones solo para las horas en los selectores de hora
+            const optionInicio = document.createElement('option');
+            optionInicio.value = formattedHour;
+            optionInicio.textContent = formattedHour;
+            selectHoraInicio.appendChild(optionInicio);
+    
+            const optionFin = document.createElement('option');
+            optionFin.value = formattedHour;
+            optionFin.textContent = formattedHour;
+            selectHoraFin.appendChild(optionFin);
+        }
+    
+        // Función para formatear las fechas en el formato deseado
+        function formatFecha(fecha) {
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            return new Date(fecha).toLocaleDateString('es-CL', options);
+        }
+    
+        // Obtén las fechas del formulario
+        const fechaInicio = document.getElementById('fecha_inicio').value;
+        const fechaFin = document.getElementById('fecha_fin').value;
+    
+        // Formatea las fechas y muesralas en el formulario
+        document.getElementById('fecha_inicio').value = formatFecha(fechaInicio);
+        document.getElementById('fecha_fin').value = formatFecha(fechaFin);
+    </script>
+    
 {% endblock %}
