@@ -32,6 +32,8 @@ class Estacionamiento(models.Model):
     direccion = models.CharField(max_length=200)
     dueño = models.ForeignKey(Dueno, on_delete=models.CASCADE)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
+    costo_por_hora = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+
 
 class Arrendamiento(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
