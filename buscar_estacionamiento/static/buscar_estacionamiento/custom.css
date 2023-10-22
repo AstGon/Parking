@@ -43,3 +43,11 @@
   background-color: transparent; /* Fondo transparente */
   display: inline-block; /* Para que esté en línea con el botón Reservar */
 }
+
+#footer {
+  background-image: url('/static/buscar_estacionamiento/buscar_estacionamiento/img/edificios.png');
+  /* Puedes ajustar otras propiedades de fondo según tus necesidades */
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* Añade otras propiedades de estilo aquí */
+}
