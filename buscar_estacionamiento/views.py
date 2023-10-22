@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
 from .models import Estacionamiento, Arrendamiento
 from datetime import datetime
@@ -6,7 +7,24 @@ import pytz
 from decimal import Decimal
 
 def login(request):
-    return render(request, 'buscar_estacionamiento/login.html')
+    if request.method == 'POST':
+        email = request.POST['email']
+        contraseña = request.POST['password']
+        print(contraseña)
+        print(email)
+        user = authenticate(request, email=email, password=contraseña)
+
+        if user is not None:
+            login(request, user)
+            # El inicio de sesión fue exitoso
+            return redirect('pagina_de_inicio')  # Redirige a la página de inicio
+        else:
+            # El inicio de sesión ha fallado, puedes mostrar un mensaje de error
+            error_message = "El inicio de sesión ha fallado. Verifica tus credenciales."
+            return render(request, 'buscar_estacionamiento/login.html', {'error_message': error_message})
+
+    return render(request, 'buscar_estacionamiento/login.html', {'error_message': error_message})
+
 
 def registro_usuario(request):
     return render(request, 'buscar_estacionamiento/registro_usuario.html')
