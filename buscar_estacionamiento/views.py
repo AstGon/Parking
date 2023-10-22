@@ -40,9 +40,11 @@ def buscar_estacionamiento(request):
         # Calcula las horas totales
         horas_totales = tiempo_transcurrido.total_seconds() / 3600
 
-        # Comprueba las condiciones de fecha y hora
+        costo_por_hora = 0
+        
+
+        # Filtra estacionamientos disponibles
         if ahora <= fecha_inicio_formulario:
-            # Filtra estacionamientos disponibles
             estacionamientos_disponibles = Estacionamiento.objects.exclude(
                 id__in=Arrendamiento.objects.filter(
                     Q(fecha_fin__gte=fecha_inicio, fecha_inicio__lte=fecha_fin) &
@@ -50,7 +52,12 @@ def buscar_estacionamiento(request):
                 ).values('estacionamiento__id')
             ).filter(comuna__comuna=comuna)
             
-        costo_por_hora = 0
+
+            for estacionamiento in estacionamientos_disponibles:
+                costo_por_hora=estacionamiento.costo_por_hora
+                print(horas_totales)
+                print(costo_por_hora)
+                estacionamiento.precio_total = costo_por_hora * horas_totales  # Calcula el precio total para este estacionamiento
 
         # Pasa los valores calculados al contexto
         return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html', {
@@ -58,28 +65,3 @@ def buscar_estacionamiento(request):
             'horas_totales': horas_totales,
             'costo_por_hora': costo_por_hora,
         })
-
-    return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
-
-from django.shortcuts import render, redirect
-
-def mostrar_estacionamiento(request, estacionamiento_ids, horas_totales):
-    if request.method == 'GET':
-        precios_por_estacionamiento = {}
-
-        for estacionamiento_id in estacionamiento_ids:
-            try:
-                estacionamiento_seleccionado = Estacionamiento.objects.get(id=estacionamiento_id)
-                costo_por_hora = estacionamiento_seleccionado.costo_por_hora
-                precio_total = costo_por_hora * horas_totales
-                precios_por_estacionamiento[estacionamiento_id] = precio_total
-
-            except Estacionamiento.DoesNotExist:
-                # Puedes manejar el caso de estacionamiento no encontrado aquí si es necesario
-                pass
-
-        return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html', {
-            'precios_por_estacionamiento': precios_por_estacionamiento,
-        })
-    else:
-        return redirect('pagina_de_error')
