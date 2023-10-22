@@ -17,6 +17,9 @@ def buscar_estacionamiento(request):
 
         fecha_inicio = tz.localize(datetime.strptime(fecha_inicio, '%Y-%m-%d'))
         hora_inicio = tz.localize(datetime.strptime(hora_inicio, '%H:%M'))
+        fecha_fin = tz.localize(datetime.strptime(fecha_fin, '%Y-%m-%d'))
+        hora_fin = tz.localize(datetime.strptime(hora_fin, '%H:%M'))
+
 
         fecha_inicio_formulario = datetime.combine(fecha_inicio.date(), hora_inicio.time()).astimezone(tz)
 
@@ -25,6 +28,9 @@ def buscar_estacionamiento(request):
 
         # Inicializa la variable estacionamientos_disponibles
         estacionamientos_disponibles = []
+
+        # Calcula las horas totales
+        horas_totales = calcular_horas_totales(fecha_inicio, hora_inicio, fecha_fin, hora_fin)
 
         # Comprueba las condiciones de fecha y hora
         if ahora <= fecha_inicio_formulario:
@@ -38,10 +44,22 @@ def buscar_estacionamiento(request):
 
         return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html', {
             'estacionamientos_disponibles': estacionamientos_disponibles,
+            'horas_totales': horas_totales,
         })
-
     return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
 
+
+# Función para calcular las horas totales
+def calcular_horas_totales(fecha_inicio, hora_inicio, fecha_fin, hora_fin):
+    # Calcula la diferencia entre las fechas y horas de inicio y fin
+    tiempo_transcurrido = fecha_fin - fecha_inicio
+    horas_totales = tiempo_transcurrido.total_seconds() / 3600  # Convierte a horas
+    return int(horas_totales)
+
+# Función para calcular el precio (ajusta esta lógica según tus necesidades)
+def calcular_precio(horas_totales):
+    precio_por_hora = 10  # Precio por hora, ajusta según tus necesidades
+    return horas_totales * precio_por_hora
 
 def mostrar_estacionamiento(request):
     if request.method == 'GET':
@@ -70,14 +88,3 @@ def mostrar_estacionamiento(request):
     else:
         return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html')
 
-# Función para calcular las horas totales
-def calcular_horas_totales(fecha_inicio, hora_inicio, fecha_fin, hora_fin):
-    diferencia = fecha_fin - fecha_inicio
-    horas_totales = (diferencia.days * 24) + (diferencia.seconds // 3600)
-    horas_totales += (hora_fin.hour - hora_inicio.hour)
-    return horas_totales
-
-# Función para calcular el precio (ajusta esta lógica según tus necesidades)
-def calcular_precio(horas_totales):
-    precio_por_hora = 10  # Precio por hora, ajusta según tus necesidades
-    return horas_totales * precio_por_hora

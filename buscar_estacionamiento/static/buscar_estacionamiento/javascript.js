@@ -1,6 +1,23 @@
-// javascript.js
-
 document.addEventListener('DOMContentLoaded', function () {
+
+    const selectHoraInicio = document.getElementById('hora_inicio');
+    const selectHoraFin = document.getElementById('hora_fin');
+    
+    for (let hour = 1; hour <= 24; hour++) {
+        const formattedHour = (hour < 10) ? `0${hour}:00` : `${hour}:00`;
+        
+        const optionInicio = document.createElement('option');
+        optionInicio.value = formattedHour;
+        optionInicio.textContent = formattedHour;
+        selectHoraInicio.appendChild(optionInicio);
+    
+        const optionFin = document.createElement('option');
+        optionFin.value = formattedHour;
+        optionFin.textContent = formattedHour;
+        selectHoraFin.appendChild(optionFin);
+    }
+    
+    
     // Espera a que el DOM esté completamente cargado
 
     // Obtén todos los botones con la clase "btn-reservar"
@@ -21,4 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.body.style.overflow = 'hidden';
         });
     });
+
+
 });
+
