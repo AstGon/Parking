@@ -5,6 +5,13 @@ from django.db.models import Q
 import pytz
 from decimal import Decimal
 
+def login(request):
+    return render(request, 'buscar_estacionamiento/login.html')
+
+def registro_usuario(request):
+    return render(request, 'buscar_estacionamiento/registro_usuario.html')
+
+
 def buscar_estacionamiento(request):
     if request.method == 'POST':
         comuna = request.POST.get('comuna')

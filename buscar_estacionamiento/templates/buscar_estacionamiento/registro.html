@@ -1,0 +1,114 @@
+{% extends 'buscar_estacionamiento/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 style="margin-top: 50px; color: #4300BE;">Registro de Usuario</h2>
+            <form method="post" action="{% url 'registro_usuario' %}" onsubmit="return validateRegistrationForm()">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nombre" style="color: #9C88B8;">Nombre:</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="apellido" style="color: #9C88B8;">Apellido:</label>
+                            <input type="text" id="apellido" name="apellido" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="rut" style="color: #9C88B8;">RUT:</label>
+                            <input type="text" id="rut" name="rut" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="direccion" style="color: #9C88B8;">Dirección:</label>
+                            <input type="text" id="direccion" name "direccion" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="telefono" style="color: #9C88B8;">Teléfono:</label>
+                            <input type="text" id="telefono" name="telefono" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email" style="color: #9C88B8;">Correo Electrónico:</label>
+                            <input type="email" id="email" name="email" class="form-control validarEmail" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="password" style="color: #9C88B8;">Contraseña:</label>
+                            <input type="password" id="password" name="password" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="tarjeta_credito" style="color: #9C88B8;">Número de T de Crédito:</label>
+                            <input type="text" id="tarjeta_credito" name="tarjeta_credito" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                   
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="confirm_password" style="color: #9C88B8;">Confirmar Contraseña:</label>
+                            <input type="password" id="confirm_password" name="confirm_password" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="banco_tarjeta" style="color: #9C88B8;">Banco de la Tarjeta:</label>
+                            <input type="text" id="banco_tarjeta" name="banco_tarjeta" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn" style="margin-top: 20px; background-color: #FFA011; color: #FFFFFF; float: right;">
+                    Registrar Usuario
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateRegistrationForm() {
+        var nombreInput = document.getElementById('nombre');
+        var apellidoInput = document.getElementById('apellido');
+        var rutInput = document.getElementById('rut');
+        var direccionInput = document.getElementById('direccion');
+        var telefonoInput = document.getElementById('telefono');
+        var emailInput = document.getElementById('email');
+        var passwordInput = document.getElementById('password');
+        var confirmPasswordInput = document.getElementById('confirm_password');
+        var tarjetaCreditoInput = document.getElementById('tarjeta_credito');
+        var bancoTarjetaInput = document.getElementById('banco_tarjeta');
+
+        // Agrega validaciones para los campos según tus requisitos.
+
+        // Por ejemplo, puedes validar que el RUT tenga un formato específico,
+        // que el número de tarjeta de crédito sea válido, etc.
+
+        // Asegúrate de que las validaciones sean adecuadas para tus necesidades.
+
+        return true;
+    }
+</script>
+{% endblock %}

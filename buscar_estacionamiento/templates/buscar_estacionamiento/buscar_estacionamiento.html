@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="comuna" style="color: #9C88B8;">Comuna</label>
+                    <label for="comuna">Comuna</label>
                     <input type="text" class="form-control" id="comuna" name="comuna" style="background-color: #E5E0EC;" required>
                 </div>
             </div>
@@ -15,33 +15,35 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="fecha_inicio" style="color: #9C88B8;">Fecha de Inicio:</label>
+                    <label for="fecha_inicio">Fecha de Inicio:</label>
                     <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" style="background-color: #E5E0EC;" required>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label for="hora_inicio" style="color: #9C88B8;">Hora de Inicio:</label>
-                    <input type="time" class="form-control" id="hora_inicio" name="hora_inicio" style="background-color: #E5E0EC;" required>
-                </div>
+                <label for="hora_Inicio">Hora de Inicio:</label>
+                <select class="form-control" id="hora_inicio" name="hora_inicio" style="background-color: #E5E0EC;" required>
+                    <option value="">--:--</option>
+                </select>
             </div>
         </div>
         <div class="row">
            
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="fecha_fin" style="color: #9C88B8;">Fecha de Fin:</label>
-                    <input type="date" class="form-control" id="fecha_fin" name "fecha_fin" style="background-color: #E5E0EC;" required>
+                    <label for="fecha_fin">Fecha de Fin:</label>
+                    <input type="date" class="form-control" id="fecha_fin" name ="fecha_fin" style="background-color: #E5E0EC;" required>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="hora_fin" style="color: #9C88B8;">Hora de Fin:</label>
-                    <input type="time" class="form-control" id="hora_fin" name="hora_fin" style="background-color: #E5E0EC;" required>
+                    <label for="hora_fin">Hora de Fin:</label>
+                    <select class="form-control" id="hora_fin" name="hora_fin" style="background-color: #E5E0EC;" required>
+                        <option value="">--:--</option>
+                    </select>
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn" style="margin-top: 20px; background-color: #FFA011; color: #FFFFFF; float: right;">
+        <button type="submit" class="btn" style="margin-top: 20px; float: right;">
             Buscar
         </button>
     </form>

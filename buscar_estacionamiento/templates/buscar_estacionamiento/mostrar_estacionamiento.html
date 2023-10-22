@@ -20,7 +20,8 @@
             {% endfor %}
         </ul>
     </div>
-
+    <div class="row">
+        <div class="col-md-6">
     <!-- Modal para cada estacionamiento -->
     {% for estacionamiento in estacionamientos_disponibles %}
     <div class="modal fade" id="modal{{ estacionamiento.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
@@ -44,6 +45,8 @@
                     <a href="#" class="btn btn-primary">Confirmar Reserva</a>
                 </div>
             </div>
+        </div>
+        </div>
         </div>
     </div>
 {% endfor %}
