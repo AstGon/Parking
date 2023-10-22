@@ -44,4 +44,40 @@ def buscar_estacionamiento(request):
 
 
 def mostrar_estacionamiento(request):
-    return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html')
+    if request.method == 'GET':
+        estacionamientos_disponibles = request.session.get('estacionamientos_disponibles', [])
+        horas_totales = []
+        valor_a_pagar = []
+
+        for estacionamiento in estacionamientos_disponibles:
+            # Calcula las horas totales para cada estacionamiento
+            fecha_inicio = estacionamiento.fecha_inicio
+            hora_inicio = estacionamiento.hora_inicio
+            fecha_fin = estacionamiento.fecha_fin
+            hora_fin = estacionamiento.hora_fin
+            horas = calcular_horas_totales(fecha_inicio, hora_inicio, fecha_fin, hora_fin)
+            horas_totales.append((estacionamiento.id, horas))
+
+            # Calcula el precio para cada estacionamiento (ajusta esta lógica según tus necesidades)
+            precio = calcular_precio(horas)
+            valor_a_pagar.append((estacionamiento.id, precio))
+
+        return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html', {
+            'estacionamientos_disponibles': estacionamientos_disponibles,
+            'horas_totales': horas_totales,
+            'valor_a_pagar': valor_a_pagar,
+        })
+    else:
+        return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html')
+
+# Función para calcular las horas totales
+def calcular_horas_totales(fecha_inicio, hora_inicio, fecha_fin, hora_fin):
+    diferencia = fecha_fin - fecha_inicio
+    horas_totales = (diferencia.days * 24) + (diferencia.seconds // 3600)
+    horas_totales += (hora_fin.hour - hora_inicio.hour)
+    return horas_totales
+
+# Función para calcular el precio (ajusta esta lógica según tus necesidades)
+def calcular_precio(horas_totales):
+    precio_por_hora = 10  # Precio por hora, ajusta según tus necesidades
+    return horas_totales * precio_por_hora
