@@ -2,13 +2,14 @@
 
 {% block content %}
 <div class="container mt-5">
-    <form method="post">
+    <form method="post" action="{% url 'buscar_estacionamiento' %}">
         {% csrf_token %}
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="comuna">Comuna</label>
-                    <input type="text" class="form-control" id="comuna" name="comuna" style="background-color: #E5E0EC;" required>
+                    <input type="text" class="form-control" id="comuna" name="comuna" style="background-color: #E5E0EC;"
+                        required>
                 </div>
             </div>
         </div>
@@ -16,71 +17,42 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="fecha_inicio">Fecha de Inicio:</label>
-                    <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" style="background-color: #E5E0EC;" required>
+                    <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
+                        style="background-color: #E5E0EC;" required>
                 </div>
             </div>
             <div class="col-md-6">
                 <label for="hora_Inicio">Hora de Inicio:</label>
-                <select class="form-control" id="hora_inicio" name="hora_inicio" style="background-color: #E5E0EC;" required>
+                <select class="form-control" id="hora_inicio" name="hora_inicio" style="background-color: #E5E0EC;"
+                    required>
                     <option value="">--:--</option>
                 </select>
             </div>
         </div>
         <div class="row">
-           
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="fecha_fin">Fecha de Fin:</label>
-                    <input type="date" class="form-control" id="fecha_fin" name ="fecha_fin" style="background-color: #E5E0EC;" required>
+                    <input type="date" class="form-control" id="fecha_fin" name="fecha_fin"
+                        style="background-color: #E5E0EC;" required>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="hora_fin">Hora de Fin:</label>
-                    <select class="form-control" id="hora_fin" name="hora_fin" style="background-color: #E5E0EC;" required>
+                    <select class="form-control" id="hora_fin" name="hora_fin" style="background-color: #E5E0EC;"
+                        required>
                         <option value="">--:--</option>
                     </select>
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn" style="margin-top: 20px; float: right;">
+
+        <button type="submit" class="btn transition" style="margin-top: 20px; float: right;">
             Buscar
         </button>
     </form>
 </div>
 
-    <script>
-        const selectHoraInicio = document.getElementById('hora_inicio');
-        const selectHoraFin = document.getElementById('hora_fin');
-    
-        for (let hour = 0; hour <= 24; hour++) {
-            const formattedHour = (hour < 10) ? `0${hour}:00` : `${hour}:00`;
-    
-            // Agrega opciones solo para las horas en los selectores de hora
-            const optionInicio = document.createElement('option');
-            optionInicio.value = formattedHour;
-            optionInicio.textContent = formattedHour;
-            selectHoraInicio.appendChild(optionInicio);
-    
-            const optionFin = document.createElement('option');
-            optionFin.value = formattedHour;
-            optionFin.textContent = formattedHour;
-            selectHoraFin.appendChild(optionFin);
-        }
-    
-        // Función para formatear las fechas en el formato deseado
-        function formatFecha(fecha) {
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-            return new Date(fecha).toLocaleDateString('es-CL', options);
-        }
-    
-        // Obtén las fechas del formulario
-        const fechaInicio = document.getElementById('fecha_inicio').value;
-        const fechaFin = document.getElementById('fecha_fin').value;
-    
-        // Formatea las fechas y muesralas en el formulario
-        document.getElementById('fecha_inicio').value = formatFecha(fechaInicio);
-        document.getElementById('fecha_fin').value = formatFecha(fechaFin);
-    </script>
-    
 {% endblock %}

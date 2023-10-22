@@ -16,8 +16,30 @@
   background-color:  #9C88B8;
 
 }
+.label_registro{
 
+  color: #9C88B8;
+}
+
+.h2{
+  margin-top: 50px; 
+  color: #4300BE;
+}
 .btn{
   background-color: #FFA011; 
-  color: #FFFFFF
+  color: #FFFFFF;
+}
+
+#password,#email{
+  background-color: #E5E0EC;
+}
+
+
+.cuadro-costohora {
+  border: 2px solid purple; /* Borde morado */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 5px 10px; /* Espaciado interno */
+  color: purple; /* Texto morado */
+  background-color: transparent; /* Fondo transparente */
+  display: inline-block; /* Para que esté en línea con el botón Reservar */
 }

@@ -50,35 +50,36 @@ def buscar_estacionamiento(request):
                 ).values('estacionamiento__id')
             ).filter(comuna__comuna=comuna)
             
-        print(horas_totales)
+        costo_por_hora = 0
 
         # Pasa los valores calculados al contexto
         return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html', {
             'estacionamientos_disponibles': estacionamientos_disponibles,
             'horas_totales': horas_totales,
+            'costo_por_hora': costo_por_hora,
         })
 
     return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
 
-def mostrar_estacionamiento(request, estacionamiento_id):
-    if request.method == 'GET':
-        # Busca el estacionamiento seleccionado en la base de datos
-        try:
-            estacionamiento_seleccionado = Estacionamiento.objects.get(id=estacionamiento_id)
-        except Estacionamiento.DoesNotExist:
-            # Maneja el caso si el estacionamiento no se encuentra
-            # Redirige al usuario a una página de error o a donde desees
-            return redirect('pagina_de_error')  # Reemplaza 'pagina_de_error' con la URL deseada
+from django.shortcuts import render, redirect
 
-        # Lógica para calcular el precio total
-        costo_por_hora = estacionamiento_seleccionado.costo_por_hora
-        horas_totales = ...  # Debes obtener esto de alguna manera
-        precio_total = costo_por_hora * horas_totales
-        print(precio_total)
+def mostrar_estacionamiento(request, estacionamiento_ids, horas_totales):
+    if request.method == 'GET':
+        precios_por_estacionamiento = {}
+
+        for estacionamiento_id in estacionamiento_ids:
+            try:
+                estacionamiento_seleccionado = Estacionamiento.objects.get(id=estacionamiento_id)
+                costo_por_hora = estacionamiento_seleccionado.costo_por_hora
+                precio_total = costo_por_hora * horas_totales
+                precios_por_estacionamiento[estacionamiento_id] = precio_total
+
+            except Estacionamiento.DoesNotExist:
+                # Puedes manejar el caso de estacionamiento no encontrado aquí si es necesario
+                pass
+
         return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html', {
-            'estacionamiento_seleccionado': estacionamiento_seleccionado,
-            'horas_totales': horas_totales,
-            'precio_total': precio_total,
+            'precios_por_estacionamiento': precios_por_estacionamiento,
         })
     else:
         return redirect('pagina_de_error')
