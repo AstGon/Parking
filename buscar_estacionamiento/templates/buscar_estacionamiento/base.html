@@ -32,9 +32,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Mi Perfil</a>
                     </li>
+                    {% if user.is_authenticated and user.dueno %}
+                    <!-- Mostrar "Mis Arriendos" solo a los dueños -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Mis Arriendos</a>
+                        <a class="nav-link" href="{% url 'mis_arriendos' %}">Mis Arriendos</a>
                     </li>
+                    {% endif %}
+                    
+                    {% if user.is_authenticated and user.cliente %}
+                    <!-- Mostrar "Mis Reservas" solo a los clientes -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mis_reservas' %}">Mis Reservas</a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="#">Ayuda</a>
                     </li>                
