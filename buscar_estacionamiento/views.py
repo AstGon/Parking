@@ -9,21 +9,22 @@ from decimal import Decimal
 def login(request):
     if request.method == 'POST':
         email = request.POST['email']
-        contraseña = request.POST['password']
-        print(contraseña)
-        print(email)
-        user = authenticate(request, email=email, password=contraseña)
+        password = request.POST['password']
+        print("Email:", email)  # Agrega mensajes de impresión para depurar
+        print("Password:", password)
+        user = authenticate(request, email=email, password=password)
+        print("User:", user)
 
         if user is not None:
             login(request, user)
-            # El inicio de sesión fue exitoso
-            return redirect('pagina_de_inicio')  # Redirige a la página de inicio
+            print("User logged in successfully")
+            return redirect('pagina_de_inicio')
         else:
-            # El inicio de sesión ha fallado, puedes mostrar un mensaje de error
             error_message = "El inicio de sesión ha fallado. Verifica tus credenciales."
             return render(request, 'buscar_estacionamiento/login.html', {'error_message': error_message})
 
-    return render(request, 'buscar_estacionamiento/login.html', {'error_message': error_message})
+    return render(request, 'buscar_estacionamiento/login.html')
+
 
 
 def registro_usuario(request):
