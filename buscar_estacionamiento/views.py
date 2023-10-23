@@ -28,6 +28,8 @@ def login(request):
 def registro_usuario(request):
     return render(request, 'buscar_estacionamiento/registro_usuario.html')
 
+
+
 def tipousuario(request):
     return render(request, 'buscar_estacionamiento/tipousuario.html')
 
