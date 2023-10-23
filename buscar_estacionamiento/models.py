@@ -13,7 +13,9 @@ class Usuario(models.Model):
     direccion = models.CharField(max_length=100)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
     email = models.EmailField(max_length=254, null=True)
-    contraseña = models.CharField(max_length=8, default=get_random_string)
+    password = models.CharField(max_length=8, default=get_random_string)
+    fecha_nacimiento = models.DateField(null=True)  # Agrega este campo
+
 
 
     class Meta:

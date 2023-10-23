@@ -1,10 +1,13 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
-from .models import Estacionamiento, Arrendamiento
+from .models import Comuna, Estacionamiento, Arrendamiento, Cliente
 from datetime import datetime
 from django.db.models import Q
 import pytz
-from decimal import Decimal
+from decimal import Decimal 
+
+
+
 
 
 def login(request):
@@ -25,8 +28,54 @@ def login(request):
     return render(request, 'buscar_estacionamiento/login.html', {'error_message': error_message})
 
 
+
+
+
 def registro_usuario(request):
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        apellido = request.POST['apellido']
+        rut = request.POST['rut']
+        telefono = request.POST['telefono']
+        direccion = request.POST['direccion']
+        comuna = request.POST['comuna']  # Asumiendo que comuna es un valor de ID
+        email = request.POST['email']
+        password = request.POST['password']
+        fecha_nacimiento = request.POST['fecha_nacimiento']  # Agrega esta línea
+
+        # Obtén la instancia de Comuna
+        comuna = Comuna.objects.get(pk=comuna)
+
+        # Crea una instancia de Cliente y guárdala en la base de datos
+        nuevo_cliente = Cliente(
+            nombre=nombre,
+            apellido=apellido,
+            rut=rut,
+            telefono=telefono,
+            direccion=direccion,
+            comuna=comuna,
+            email=email,
+            fecha_nacimiento=fecha_nacimiento,  # Agrega esta línea
+        )
+        nuevo_cliente.set_password(password)  # Configura la contraseña de forma segura
+        nuevo_cliente.save()
+
+        return redirect('buscar_estacionamiento/buscar_estacionamiento')
+
     return render(request, 'buscar_estacionamiento/registro_usuario.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
