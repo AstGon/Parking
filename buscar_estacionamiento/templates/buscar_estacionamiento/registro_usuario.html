@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <h2 style="margin-top: 50px; color: #4300BE;">Registro de Usuario</h2>
-            <form method="post" action="{% url 'registro_usuario' %}">
+            <form method="post" action="{% url 'registro_usuario' %}" onsubmit="return validarFormulario()">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-md-6">
@@ -31,10 +31,11 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="fecha_nacimiento" style="color: #9C88B8;">Fecha de Nacimiento:</label>
-                            <input type="text" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" style="background-color: #E5E0EC;" required>
+                          <label for="fecha_nacimiento" style="color: #9C88B8;">Fecha de Nacimiento:</label>
+                          <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" style="background-color: #E5E0EC;" required
+                            min="1920-01-01" max="2007-12-31">
                         </div>
-                    </div>
+                      </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -46,7 +47,42 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="comuna" style="color: #9C88B8;">Comuna:</label>
-                            <input type="text" id="comuna" name="comuna" class="form-control" style="background-color: #E5E0EC;" required>
+                            <select id="comuna" name="comuna" class="form-control" style="background-color: #E5E0EC;" required>
+                                <option value="">Selecciona una comuna</option>
+                                <option value="Cerrillos">Cerrillos</option>
+                                <option value="Cerro Navia">Cerro Navia</option>
+                                <option value="Conchalí">Conchalí</option>
+                                <option value="El Bosque">El Bosque</option>
+                                <option value="Estación Central">Estación Central</option>
+                                <option value="Huechuraba">Huechuraba</option>
+                                <option value="Independencia">Independencia</option>
+                                <option value="La Cisterna">La Cisterna</option>
+                                <option value="La Florida">La Florida</option>
+                                <option value="La Granja">La Granja</option>
+                                <option value="La Pintana">La Pintana</option>
+                                <option value="La Reina">La Reina</option>
+                                <option value="Las Condes">Las Condes</option>
+                                <option value="Lo Barnechea">Lo Barnechea</option>
+                                <option value="Lo Espejo">Lo Espejo</option>
+                                <option value="Lo Prado">Lo Prado</option>
+                                <option value="Macul">Macul</option>
+                                <option value="Maipú">Maipú</option>
+                                <option value="Ñuñoa">Ñuñoa</option>
+                                <option value="Pedro Aguirre Cerda">Pedro Aguirre Cerda</option>
+                                <option value="Peñalolén">Peñalolén</option>
+                                <option value="Providencia">Providencia</option>
+                                <option value="Pudahuel">Pudahuel</option>
+                                <option value="Quilicura">Quilicura</option>
+                                <option value="Quinta Normal">Quinta Normal</option>
+                                <option value="Recoleta">Recoleta</option>
+                                <option value="Renca">Renca</option>
+                                <option value="San Joaquín">San Joaquín</option>
+                                <option value="San Miguel">San Miguel</option>
+                                <option value="San Ramón">San Ramón</option>
+                                <option value="Santiago">Santiago</option>
+                                <option value="Vitacura">Vitacura</option>
+                            </select>
+                            
                         </div>
                     </div>
                 </div>
@@ -55,8 +91,10 @@
                         <div class="form-group">
                             <label for="telefono" style="color: #9C88B8;">Teléfono:</label>
                             <input type="text" id="telefono" name="telefono" class="form-control" style="background-color: #E5E0EC;" required>
+                            <small id="telefono-error" class="text-danger"></small>
                         </div>
                     </div>
+                    
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="email" style="color: #9C88B8;">Correo Electrónico:</label>
@@ -85,4 +123,8 @@
         </div>
     </div>
 </div>
+
+
+
 {% endblock %}
+

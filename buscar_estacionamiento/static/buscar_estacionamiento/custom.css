@@ -51,3 +51,29 @@
   background-repeat: no-repeat;
   /* Añade otras propiedades de estilo aquí */
 }
+
+
+/* Estilo para el campo "Rut" */
+#rut-wrapper {
+  background-color: #E5E0EC; /* Color de fondo similar a otros campos */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 5px; /* Espaciado interno */
+}
+
+/* Estilo para el botón "Valida RUT" */
+#btnvalida {
+  background-color: #FFA011; /* Color de fondo similar a otros botones */
+  color: #FFFFFF; /* Color de texto en el botón */
+  border: none; /* Quita el borde del botón si es necesario */
+}
+
+/* Estilo para el cuadro de texto "ej: 11111111" */
+#txt_rut::placeholder {
+  font-size: 14px; /* Tamaño de fuente similar a otros campos */
+  color: #000; /* Color de texto similar a otros campos */
+  font-family: Arial, sans-serif; /* Tipografía similar a otros campos */
+}
+
+
+
+
