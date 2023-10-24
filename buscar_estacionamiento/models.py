@@ -3,7 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.contrib.auth.models import Permission, Group
+
+
 
 class Comuna(models.Model):
     comuna = models.CharField(max_length=50)
