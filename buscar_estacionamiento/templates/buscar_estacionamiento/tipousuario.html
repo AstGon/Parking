@@ -1,0 +1,21 @@
+{% extends 'buscar_estacionamiento/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 text-center">
+            <h2 style="margin-top: 50px; color: #4300BE; padding: 20px;">Selecciona tipo de usuario</h2>
+            <form method="post" action="{% url 'registro_usuario' %}">
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        <button type="submit" class="btn btn-lg" (click)="onOwnerButtonClick()">DUEÑO</button>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <button type="submit" class="btn btn-lg" (click)="onClientButtonClick()">CLIENTE</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

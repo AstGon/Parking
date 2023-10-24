@@ -4,47 +4,52 @@ from .models import Estacionamiento, Arrendamiento
 from datetime import datetime
 from django.db.models import Q
 import pytz
-from django.contrib.auth.backends import ModelBackend
-from .models import Dueno, Cliente
-
-class EmailBackend(ModelBackend):
-    def authenticate(self, request, email=None, password=None, **kwargs):
-        try:
-            # First, try to authenticate as a 'Dueno'
-            dueno = Dueno.objects.get(user__email=email)
-            if dueno.user.check_password(password):
-                return dueno.user
-        except Dueno.DoesNotExist:
-            # If not a 'Dueno', try to authenticate as a 'Cliente'
-            try:
-                cliente = Cliente.objects.get(user__email=email)
-                if cliente.user.check_password(password):
-                    return cliente.user
-            except Cliente.DoesNotExist:
-                return None
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
 
 
-def login(request):
+def registro_cliente(request):
     if request.method == 'POST':
-        email = request.POST['email']
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Aquí debes crear una instancia de Cliente y asociarla al usuario
+            # Ejemplo: Cliente.objects.create(user=user, ...)
+            login(request, user)
+            return redirect('dashboard_cliente')  # Redirige al panel de cliente
+    else:
+        form = UserCreationForm()
+    return render(request, 'registro_cliente.html', {'form': form})
+
+def registro_dueno(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Aquí debes crear una instancia de Dueño y asociarla al usuario
+            # Ejemplo: Dueño.objects.create(user=user, ...)
+            login(request, user)
+            return redirect('dashboard_dueno')  # Redirige al panel de dueño
+    else:
+        form = UserCreationForm()
+    return render(request, 'registro_dueno.html', {'form': form})
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
         password = request.POST['password']
-        user = EmailBackend().authenticate(request, email=email, password=password)
-        print(user)
-
+        user = authenticate(request, username=username, password=password)
         if user is not None:
-            auth_login(request, user)
-            return redirect('pagina_de_inicio')
+            login(request, user)
+            # Redirige a la página de inicio de sesión exitosa o al panel de usuario según su rol
+            if user.cliente:
+                return redirect('dashboard_cliente')
+            elif user.dueno:
+                return redirect('dashboard_dueno')
         else:
-            error_message = "El inicio de sesión ha fallado. Verifica tus credenciales."
-            return render(request, 'buscar_estacionamiento/login.html', {'error_message': error_message})
-
-    return render(request, 'buscar_estacionamiento/login.html')
-
-
-
-def registro_usuario(request):
-    return render(request, 'buscar_estacionamiento/registro_usuario.html')
-
+            # Manejar el caso en el que las credenciales no son válidas
+            # Puedes mostrar un mensaje de error en la plantilla.
+    return render(request, 'login.html')
 
 def buscar_estacionamiento(request):
     if request.method == 'POST':

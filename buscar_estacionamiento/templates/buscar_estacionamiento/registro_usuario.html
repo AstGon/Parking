@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <h2 style="margin-top: 50px; color: #4300BE;">Registro de Usuario</h2>
-            <form method="post" action="{% url 'registro_usuario' %}" onsubmit="return validateRegistrationForm()">
+            <form method="post" action="{% url 'registro_usuario' %}">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-md-6">
@@ -26,12 +26,27 @@
                         <div class="form-group">
                             <label for="rut" style="color: #9C88B8;">RUT:</label>
                             <input type="text" id="rut" name="rut" class="form-control" style="background-color: #E5E0EC;" required>
+                            <small id="rut-error" class="text-danger"></small>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label for="fecha_nacimiento" style="color: #9C88B8;">Fecha de Nacimiento:</label>
+                            <input type="text" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label for="direccion" style="color: #9C88B8;">Dirección:</label>
-                            <input type="text" id="direccion" name "direccion" class="form-control" style="background-color: #E5E0EC;" required>
+                            <input type="text" id="direccion" name="direccion" class="form-control" style="background-color: #E5E0EC;" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="comuna" style="color: #9C88B8;">Comuna:</label>
+                            <input type="text" id="comuna" name="comuna" class="form-control" style="background-color: #E5E0EC;" required>
                         </div>
                     </div>
                 </div>
@@ -56,37 +71,18 @@
                             <input type="password" id="password" name="password" class="form-control" style="background-color: #E5E0EC;" required>
                         </div>
                     </div>
-                    
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="tarjeta_credito" style="color: #9C88B8;">Número de T de Crédito:</label>
-                            <input type="text" id="tarjeta_credito" name="tarjeta_credito" class="form-control" style="background-color: #E5E0EC;" required>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                   
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="confirm_password" style="color: #9C88B8;">Confirmar Contraseña:</label>
                             <input type="password" id="confirm_password" name="confirm_password" class="form-control" style="background-color: #E5E0EC;" required>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="banco_tarjeta" style="color: #9C88B8;">Banco de la Tarjeta:</label>
-                            <input type="text" id="banco_tarjeta" name="banco_tarjeta" class="form-control" style="background-color: #E5E0EC;" required>
-                        </div>
-                    </div>
                 </div>
-                <button type="submit" class="btn" style="margin-top: 20px; background-color: #FFA011; color: #FFFFFF; float: right;">
-                    Registrar Usuario
+                <button type="submit" class="btn" style="margin-top: 20px; float: right;">
+                    Registro
                 </button>
             </form>
         </div>
     </div>
 </div>
-
-
 {% endblock %}
