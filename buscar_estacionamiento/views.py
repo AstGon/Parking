@@ -87,4 +87,5 @@ def buscar_estacionamiento(request):
             'estacionamientos_disponibles': estacionamientos_disponibles,
             'horas_totales': horas_totales,
             'costo_por_hora': costo_por_hora,
-        })    return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
+        })
+    return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
