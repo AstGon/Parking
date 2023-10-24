@@ -1,6 +1,7 @@
+from pyexpat.errors import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
-from .models import Estacionamiento, Arrendamiento,Dueno,Cliente
+from .models import Estacionamiento, Arrendamiento,Dueno,Cliente,User
 from datetime import datetime
 from django.db.models import Q
 import pytz
@@ -9,21 +10,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from .forms import ClienteRegistrationForm 
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
 
-def registro_cliente(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            
-            # Crea una instancia de Cliente y asocia al usuario
-            cliente = Cliente.objects.create(user=user)
-            
-            login(request, user)
-            return redirect('dashboard_cliente')  # Redirige al panel de cliente
-    else:
-        form = UserCreationForm()
-    return render(request, 'registro_cliente.html', {'form': form})
+class registro_cliente(CreateView):
+    template_name = 'registro_cliente.html'  # Crea un template HTML para el formulario de registro.
+    form_class = ClienteRegistrationForm   # Usa el formulario de registro de usuario de Django.
+    success_url = reverse_lazy('login')  # Redirige a la página de inicio de sesión después del registro.
+
+
+
 
 def registro_dueno(request):
     if request.method == 'POST':
@@ -38,7 +35,7 @@ def registro_dueno(request):
             return redirect('dashboard_dueno')  # Redirige al panel de dueño
     else:
         form = UserCreationForm()
-    return render(request, 'registro_dueno.html', {'form': form})
+    return render(request, 'buscar_estacionamiento/registro_dueno.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':

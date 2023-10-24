@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class Comuna(models.Model):
     comuna = models.CharField(max_length=50)
     codigo_postal = models.CharField(max_length=10)
@@ -15,6 +14,9 @@ class Cliente(models.Model):
     direccion = models.CharField(max_length=100)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
     email = models.EmailField(max_length=254, null=True)
+
+    def __str__(self):
+        return self.user.username
 
 class Vehiculo(models.Model):
     patente = models.CharField(max_length=7)
@@ -31,6 +33,9 @@ class Dueno(models.Model):
     direccion = models.CharField(max_length=100)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
     email = models.EmailField(max_length=254, null=True)
+
+    def __str__(self):
+        return self.user.username
 
 class Estacionamiento(models.Model):
     direccion = models.CharField(max_length=200)
