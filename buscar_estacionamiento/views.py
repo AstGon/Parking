@@ -1,20 +1,24 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
-from .models import Estacionamiento, Arrendamiento
+from .models import Estacionamiento, Arrendamiento,Dueno,Cliente
 from datetime import datetime
 from django.db.models import Q
 import pytz
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 
 def registro_cliente(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Aquí debes crear una instancia de Cliente y asociarla al usuario
-            # Ejemplo: Cliente.objects.create(user=user, ...)
+            
+            # Crea una instancia de Cliente y asocia al usuario
+            cliente = Cliente.objects.create(user=user)
+            
             login(request, user)
             return redirect('dashboard_cliente')  # Redirige al panel de cliente
     else:
@@ -26,8 +30,10 @@ def registro_dueno(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Aquí debes crear una instancia de Dueño y asociarla al usuario
-            # Ejemplo: Dueño.objects.create(user=user, ...)
+            
+            # Crea una instancia de Dueño y asocia al usuario
+            dueno = Dueno.objects.create(user=user)
+            
             login(request, user)
             return redirect('dashboard_dueno')  # Redirige al panel de dueño
     else:
@@ -41,12 +47,11 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            # Redirige a la página de inicio de sesión exitosa o al panel de usuario según su rol
-            if user.cliente:
+            if hasattr(user, 'cliente') and user.cliente:
                 return redirect('dashboard_cliente')
-            elif user.dueno:
+            elif hasattr(user, 'dueno') and user.dueno:
                 return redirect('dashboard_dueno')
-        else:
+
             # Manejar el caso en el que las credenciales no son válidas
             # Puedes mostrar un mensaje de error en la plantilla.
     return render(request, 'login.html')
