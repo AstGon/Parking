@@ -1,8 +1,39 @@
-from django.shortcuts import render
-from .models import Estacionamiento, Arrendamiento
+from pyexpat.errors import messages
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect, render
+from .models import Estacionamiento, Arrendamiento,Dueno,Cliente,User
 from datetime import datetime
 from django.db.models import Q
 import pytz
+from django.shortcuts import render, redirect
+from .forms import ClienteRegistrationForm, DuenoRegistrationForm,ClienteRegistrationForm
+
+def cliente_register(request):
+    if request.method == 'POST':
+        form = ClienteRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('buscar_estacionamiento/buscar_estacionmiento.html')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
+    else:
+        form = ClienteRegistrationForm()
+    return render(request, 'buscar_estacionamiento/registro_cliente.html', {'form': form})
+
+def dueno_register(request):
+    if request.method == 'POST':
+        form = DuenoRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('buscar_estacionamiento/buscar_estacionmiento')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
+    else:
+        form = DuenoRegistrationForm()
+    return render(request, 'buscar_estacionamiento/registro_dueno.html', {'form': form})
+
+
+
+
+
 
 def buscar_estacionamiento(request):
     if request.method == 'POST':
@@ -17,6 +48,8 @@ def buscar_estacionamiento(request):
 
         fecha_inicio = tz.localize(datetime.strptime(fecha_inicio, '%Y-%m-%d'))
         hora_inicio = tz.localize(datetime.strptime(hora_inicio, '%H:%M'))
+        fecha_fin = tz.localize(datetime.strptime(fecha_fin, '%Y-%m-%d'))
+        hora_fin = tz.localize(datetime.strptime(hora_fin, '%H:%M'))
 
         fecha_inicio_formulario = datetime.combine(fecha_inicio.date(), hora_inicio.time()).astimezone(tz)
 
@@ -26,48 +59,32 @@ def buscar_estacionamiento(request):
         # Inicializa la variable estacionamientos_disponibles
         estacionamientos_disponibles = []
 
-        # Comprueba las condiciones de fecha y hora
+        tiempo_transcurrido = fecha_fin - fecha_inicio + (hora_fin - hora_inicio)
+        # Calcula las horas totales
+        horas_totales = tiempo_transcurrido.total_seconds() / 3600
+
+        costo_por_hora = 0
+        
+
+        # Filtra estacionamientos disponibles
         if ahora <= fecha_inicio_formulario:
-            # Filtra estacionamientos disponibles
             estacionamientos_disponibles = Estacionamiento.objects.exclude(
                 id__in=Arrendamiento.objects.filter(
                     Q(fecha_fin__gte=fecha_inicio, fecha_inicio__lte=fecha_fin) &
                     Q(hora_fin__gte=hora_inicio, hora_inicio__lte=hora_fin)
                 ).values('estacionamiento__id')
             ).filter(comuna__comuna=comuna)
+            
 
+            for estacionamiento in estacionamientos_disponibles:
+                costo_por_hora=estacionamiento.costo_por_hora
+                print(horas_totales)
+                print(costo_por_hora)
+                estacionamiento.precio_total = costo_por_hora * horas_totales  # Calcula el precio total para este estacionamiento
+
+        # Pasa los valores calculados al contexto
         return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html', {
             'estacionamientos_disponibles': estacionamientos_disponibles,
-        })
-
-    return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
-
-
-def mostrar_estacionamiento(request):
-    return render(request, 'buscar_estacionamiento/mostrar_estacionamiento.html')
-
-def perfil_usuario(request):
-    return render(request, 'buscar_estacionamiento/perfil.html')
-
-def agregar_vehiculo(request):
-    return render(request, 'buscar_estacionamiento/agregar_vehiculo.html')
-
-
-from django.shortcuts import render, redirect
-from .models import Vehiculo
-
-def guardar_vehiculo(request):
-    if request.method == 'POST':
-        patente = request.POST['patente']
-        modelo = request.POST['modelo']
-        marca = request.POST['marca']
-        
-        vehiculo = Vehiculo(patente=patente, modelo=modelo, marca=marca)
-        vehiculo.save()
-        return redirect('perfil_usuario')
-
-    # Resto de la lógica, si es necesario
-    # debería funcionar cuando se almacene en la bd
-    
-
-    return render(request, 'buscar_estacionamiento/agregar_vehiculo.html')
+            'horas_totales': horas_totales,
+            'costo_por_hora': costo_por_hora,
+        })    return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')

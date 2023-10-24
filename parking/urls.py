@@ -8,5 +8,9 @@ urlpatterns = [
     path('mostrar_estacionamiento/', views.mostrar_estacionamiento, name='mostrar_estacionamiento'),
     path('perfil/', views.perfil_usuario, name='perfil_usuario'),
     path('agregar_vehiculo/', views.agregar_vehiculo, name='agregar_vehiculo'),
-    path('guardar_vehiculo/', views.guardar_vehiculo, name='guardar_vehiculo')
+    path('login/', views.login, name='login'),
+    path('cliente/register/', views.cliente_register, name='cliente_register'),
+    path('dueno/register/', views.dueno_register, name='dueno_register'),
 ]
+
+
