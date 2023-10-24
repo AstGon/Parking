@@ -1,22 +1,84 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+
+
 
 class Comuna(models.Model):
     comuna = models.CharField(max_length=50)
     codigo_postal = models.CharField(max_length=10)
 
-class Cliente(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+# Define un administrador de usuario personalizado
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('El Email es obligatorio')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser debe tener is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser debe tener is_superuser=True.')
+
+        return self.create_user(email, password, **extra_fields)
+
+# Define un modelo de usuario personalizado
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
     rut = models.CharField(max_length=12)
     telefono = models.CharField(max_length=15)
     direccion = models.CharField(max_length=100)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
-    email = models.EmailField(max_length=254, null=True)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.user.username
+        return self.email
+
+# Define modelos para grupos y permisos
+class CustomGroup(Group):
+    # Agrega campos adicionales si es necesario
+    pass
+
+class CustomPermission(Permission):
+    # Agrega campos adicionales si es necesario
+    pass
+
+# Asigna modelos de grupo y permiso personalizados
+class Cliente(CustomUser):
+    # Agrega campos específicos del cliente aquí
+    pass
+
+    class Meta:
+        verbose_name = 'Cliente'
+        verbose_name_plural = 'Clientes'
+
+class Dueno(CustomUser):
+    # Agrega campos específicos del dueño aquí
+    pass
+
+    class Meta:
+        verbose_name = 'Dueño'
+        verbose_name_plural = 'Dueños'
+
 
 class Vehiculo(models.Model):
     patente = models.CharField(max_length=7)
@@ -24,18 +86,6 @@ class Vehiculo(models.Model):
     marca = models.CharField(max_length=50)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
 
-class Dueno(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=50)
-    apellido = models.CharField(max_length=50)
-    rut = models.CharField(max_length=12)
-    telefono = models.CharField(max_length=15)
-    direccion = models.CharField(max_length=100)
-    comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
-    email = models.EmailField(max_length=254, null=True)
-
-    def __str__(self):
-        return self.user.username
 
 class Estacionamiento(models.Model):
     direccion = models.CharField(max_length=200)

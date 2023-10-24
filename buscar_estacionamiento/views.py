@@ -6,6 +6,33 @@ from datetime import datetime
 from django.db.models import Q
 import pytz
 from django.shortcuts import render, redirect
+from .forms import ClienteRegistrationForm, DuenoRegistrationForm,ClienteRegistrationForm
+
+def cliente_register(request):
+    if request.method == 'POST':
+        form = ClienteRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('buscar_estacionamiento/buscar_estacionmiento.html')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
+    else:
+        form = ClienteRegistrationForm()
+    return render(request, 'buscar_estacionamiento/registro_cliente.html', {'form': form})
+
+def dueno_register(request):
+    if request.method == 'POST':
+        form = DuenoRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('buscar_estacionamiento/buscar_estacionmiento')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
+    else:
+        form = DuenoRegistrationForm()
+    return render(request, 'buscar_estacionamiento/registro_dueno.html', {'form': form})
+
+
+
+
 
 
 def buscar_estacionamiento(request):
