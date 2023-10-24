@@ -1,20 +1,34 @@
 from pyexpat.errors import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
-from .models import Estacionamiento, Arrendamiento,Dueno,Cliente,User
+from django.urls import reverse_lazy
+from .models import Estacionamiento, Arrendamiento,Dueno,Cliente
 from datetime import datetime
 from django.db.models import Q
 import pytz
 from django.shortcuts import render, redirect
-from .forms import ClienteRegistrationForm, DuenoRegistrationForm,ClienteRegistrationForm
+from .forms import ClienteRegistrationForm, CustomAuthenticationForm, DuenoRegistrationForm,ClienteRegistrationForm
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
 
 def cliente_register(request):
     if request.method == 'POST':
         form = ClienteRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            # Crear una instancia de Cliente
+            user = form.save(commit=False)  # Guarda el formulario sin guardar en la base de datos
+            user.save()
+            cliente = Cliente.objects.create(user=user)  # Crea una instancia de Cliente relacionada
+            # Asigna otros campos específicos de Cliente
+            cliente.nombre = form.cleaned_data['nombre']
+            # Completa otros campos específicos de Cliente
+
             login(request, user)
-            return redirect('buscar_estacionamiento/buscar_estacionmiento.html')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
+            return redirect('ruta_de_redireccion_cliente')
     else:
         form = ClienteRegistrationForm()
     return render(request, 'buscar_estacionamiento/registro_cliente.html', {'form': form})
@@ -23,14 +37,19 @@ def dueno_register(request):
     if request.method == 'POST':
         form = DuenoRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            # Crear una instancia de Dueno
+            user = form.save(commit=False)  # Guarda el formulario sin guardar en la base de datos
+            user.save()
+            dueno = Dueno.objects.create(user=user)  # Crea una instancia de Dueno relacionada
+            # Asigna otros campos específicos de Dueno
+            dueno.nombre = form.cleaned_data['nombre']
+            # Completa otros campos específicos de Dueno
+
             login(request, user)
-            return redirect('buscar_estacionamiento/buscar_estacionmiento')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
+            return redirect('ruta_de_redireccion_dueno')
     else:
         form = DuenoRegistrationForm()
     return render(request, 'buscar_estacionamiento/registro_dueno.html', {'form': form})
-
-
 
 
 
@@ -89,3 +108,9 @@ def buscar_estacionamiento(request):
             'costo_por_hora': costo_por_hora,
         })
     return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
+
+
+class CustomLoginView(LoginView):
+    template_name = 'buscar_estacionamiento/login.html'
+    form_class = CustomAuthenticationForm  # Usa tu formulario personalizado
+    success_url = reverse_lazy('buscar_estacionamiento')

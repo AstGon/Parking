@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Cliente,Dueno, Comuna
+from django.contrib.auth.forms import AuthenticationForm
+from .models import CustomUser  # Asegúrate de ajustar la importación según la ubicación de tu modelo
+
 
 class DuenoRegistrationForm(UserCreationForm):
     # Agregar campos específicos de Dueno aquí
@@ -27,3 +30,8 @@ class ClienteRegistrationForm(UserCreationForm):
     class Meta:
         model = Cliente
         fields = ('email', 'password1', 'password2', 'nombre', 'apellido', 'rut', 'telefono', 'direccion', 'comuna')        
+
+class CustomAuthenticationForm(AuthenticationForm):
+    class Meta:
+        model = CustomUser  # Usa el nombre de tu modelo de usuario personalizado
+        fields = ('email', 'password')  # Lista de campos para autenticación

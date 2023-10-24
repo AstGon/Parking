@@ -132,6 +132,12 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_URL = 'login.htm'
 
-AUTHENTICATION_BACKENDS = ['buscar_estacionamiento.custom_auth.EmailBackend']
+AUTHENTICATION_BACKENDS = [
+    'buscar_estacionamiento.custom_auth.CustomAuthenticationBackend',
+    'buscar_estacionamiento.custom_auth.EmailBackend',
+    # ... Otros backends de autenticación si los tienes ...
+]
 
 AUTH_USER_MODEL = 'buscar_estacionamiento.CustomUser'
+
+AUTHENTICATION_CLASSES = ['buscar_estacionamiento.custom_auth.CustomAuthenticationBackend']
