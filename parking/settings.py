@@ -1,5 +1,3 @@
-
-
 import os
 from pathlib import Path
 
@@ -126,3 +124,12 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',  # Para permitir autenticación por correo electrónico
+]
+
+LOGIN_URL = 'login.htm'
+
+AUTHENTICATION_BACKENDS = ['buscar_estacionamiento.custom_auth.EmailBackend']

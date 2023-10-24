@@ -1,43 +1,48 @@
 from django.db import models
-from django.utils.crypto import get_random_string
+from django.contrib.auth.models import User
 
 class Comuna(models.Model):
-    nombre = models.CharField(max_length=50)
+    comuna = models.CharField(max_length=50)
     codigo_postal = models.CharField(max_length=10)
 
-class Usuario(models.Model):
+class Cliente(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
-    rut = models.CharField(max_length=12, unique=True)
+    rut = models.CharField(max_length=12)
     telefono = models.CharField(max_length=15)
     direccion = models.CharField(max_length=100)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
     email = models.EmailField(max_length=254, null=True)
-    password = models.CharField(max_length=8, default=get_random_string)
-    fecha_nacimiento = models.DateField(null=True)  # Agrega este campo
 
-
-
-    class Meta:
-        abstract = True
+    def __str__(self):
+        return self.user.username
 
 class Vehiculo(models.Model):
-    patente = models.CharField(max_length=7, unique=True)
+    patente = models.CharField(max_length=7)
     modelo = models.CharField(max_length=50)
     marca = models.CharField(max_length=50)
-    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+
+class Dueno(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=50)
+    apellido = models.CharField(max_length=50)
+    rut = models.CharField(max_length=12)
+    telefono = models.CharField(max_length=15)
+    direccion = models.CharField(max_length=100)
+    comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
+    email = models.EmailField(max_length=254, null=True)
+
+    def __str__(self):
+        return self.user.username
 
 class Estacionamiento(models.Model):
     direccion = models.CharField(max_length=200)
+    dueño = models.ForeignKey(Dueno, on_delete=models.CASCADE)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
-    costo_por_hora = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    dueno = models.ForeignKey('Dueno', on_delete=models.CASCADE)
+    costo_por_hora = models.IntegerField(default=0)
 
-class Cliente(Usuario):
-    vehiculos = models.ManyToManyField(Vehiculo, blank=True, related_name='clientes_vehiculos')
-
-class Dueno(Usuario):
-    estacionamientos = models.ManyToManyField(Estacionamiento, blank=True, related_name='duenos_estacionamientos')
 
 class Arrendamiento(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
@@ -54,3 +59,5 @@ class Reporte(models.Model):
     descripcion = models.TextField()
     monto_recaudado = models.DecimalField(max_digits=10, decimal_places=2)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
+

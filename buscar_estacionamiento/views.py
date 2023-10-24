@@ -1,86 +1,35 @@
+from pyexpat.errors import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
-from .models import Comuna, Estacionamiento, Arrendamiento, Cliente
+from .models import Estacionamiento, Arrendamiento,Dueno,Cliente,User
 from datetime import datetime
 from django.db.models import Q
 import pytz
-from decimal import Decimal 
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+from .forms import ClienteRegistrationForm 
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
 
 
-
-
-
-def login(request):
-    error_message = None  # Inicializa la variable error_message
+def registro_dueno(request):
     if request.method == 'POST':
-        email = request.POST['email']
-        contraseña = request.POST['password']
-        user = authenticate(request, email=email, password=contraseña)
-
-        if user is not None:
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            
+            # Crea una instancia de Dueño y asocia al usuario
+            dueno = Dueno.objects.create(user=user)
+            
             login(request, user)
-            # El inicio de sesión fue exitoso
-            return redirect('pagina_de_inicio')  # Redirige a la página de inicio
-        else:
-            # El inicio de sesión ha fallado, puedes mostrar un mensaje de error
-            error_message = "El inicio de sesión ha fallado. Verifica tus credenciales."
+            return redirect('dashboard_dueno')  # Redirige al panel de dueño
+    else:
+        form = UserCreationForm()
+    return render(request, 'buscar_estacionamiento/registro_dueno.html', {'form': form})
 
-    return render(request, 'buscar_estacionamiento/login.html', {'error_message': error_message})
-
-
-
-
-
-def registro_usuario(request):
-    if request.method == 'POST':
-        nombre = request.POST['nombre']
-        apellido = request.POST['apellido']
-        rut = request.POST['rut']
-        telefono = request.POST['telefono']
-        direccion = request.POST['direccion']
-        comuna = request.POST['comuna']  # Asumiendo que comuna es un valor de ID
-        email = request.POST['email']
-        password = request.POST['password']
-        fecha_nacimiento = request.POST['fecha_nacimiento']  # Agrega esta línea
-
-        # Obtén la instancia de Comuna
-        comuna = Comuna.objects.get(pk=comuna)
-
-        # Crea una instancia de Cliente y guárdala en la base de datos
-        nuevo_cliente = Cliente(
-            nombre=nombre,
-            apellido=apellido,
-            rut=rut,
-            telefono=telefono,
-            direccion=direccion,
-            comuna=comuna,
-            email=email,
-            fecha_nacimiento=fecha_nacimiento,  # Agrega esta línea
-        )
-        nuevo_cliente.set_password(password)  # Configura la contraseña de forma segura
-        nuevo_cliente.save()
-
-        return redirect('buscar_estacionamiento/buscar_estacionamiento')
-
-    return render(request, 'buscar_estacionamiento/registro_usuario.html')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def tipousuario(request):
-    return render(request, 'buscar_estacionamiento/tipousuario.html')
 
 
 def buscar_estacionamiento(request):
