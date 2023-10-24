@@ -19,12 +19,16 @@
                     <input type="checkbox" class="form-check-input" id="rememberMe">
                     <label class="form-check-label" for="rememberMe">Recordarme</label>
                 </div>
-                <button type="submit" class="btn" style="margin-top: 20px; float: right;">
+               
+
+                <a href="{% url 'buscar_estacionamiento' %}" class="btn" style="margin-top: 20px; float: right;">
                     Iniciar Sesión
-                </button>
+                </a>
             </form>
             <div class="dropdown-divider" style="margin-top: 20px;"></div>
-            <a style="color: #9C88B8; font-size: 10px;" class="dropdown-item" href="{% url 'registro_usuario' %}">¿Nuevo por aquí? Regístrate</a>
+            <a style="color: #9C88B8; font-size: 10px;" class="dropdown-item" href="{% url 'tipousuario' %}">
+                ¿Nuevo por aquí? Regístrate
+            </a>
         </div>
     </div>
 </div>

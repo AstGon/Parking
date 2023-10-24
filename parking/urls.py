@@ -10,3 +10,5 @@ urlpatterns = [
     path('registro_cliente/', views.registro_cliente, name='registro_cliente'),
 
 ]
+
+

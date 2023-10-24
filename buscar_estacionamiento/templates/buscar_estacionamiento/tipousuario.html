@@ -8,10 +8,14 @@
             <form method="post" action="{% url 'registro_usuario' %}">
                 <div class="row">
                     <div class="col-md-6 text-center">
-                        <button type="submit" class="btn btn-lg" (click)="onOwnerButtonClick()">DUEÑO</button>
+                        <a href="{% url 'registro_usuario' %}" type="submit" class="btn btn-lg" (click)="onOwnerButtonClick()">
+                            DUEÑO
+                        </a>
                     </div>
                     <div class="col-md-6 text-center">
-                        <button type="submit" class="btn btn-lg" (click)="onClientButtonClick()">CLIENTE</button>
+                        <a href="{% url 'registro_usuario' %}" type="submit" class="btn btn-lg" (click)="onClientButtonClick()">
+                            CLIENTE
+                        </a>
                     </div>
                 </div>
             </form>

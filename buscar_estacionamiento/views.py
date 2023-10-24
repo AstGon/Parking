@@ -14,13 +14,6 @@ from .forms import ClienteRegistrationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
-class registro_cliente(CreateView):
-    template_name = 'registro_cliente.html'  # Crea un template HTML para el formulario de registro.
-    form_class = ClienteRegistrationForm   # Usa el formulario de registro de usuario de Django.
-    success_url = reverse_lazy('login')  # Redirige a la página de inicio de sesión después del registro.
-
-
-
 
 def registro_dueno(request):
     if request.method == 'POST':
@@ -37,21 +30,7 @@ def registro_dueno(request):
         form = UserCreationForm()
     return render(request, 'buscar_estacionamiento/registro_dueno.html', {'form': form})
 
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            if hasattr(user, 'cliente') and user.cliente:
-                return redirect('dashboard_cliente')
-            elif hasattr(user, 'dueno') and user.dueno:
-                return redirect('dashboard_dueno')
 
-            # Manejar el caso en el que las credenciales no son válidas
-            # Puedes mostrar un mensaje de error en la plantilla.
-    return render(request, 'login.html')
 
 def buscar_estacionamiento(request):
     if request.method == 'POST':

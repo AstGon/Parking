@@ -133,3 +133,73 @@ document.addEventListener("DOMContentLoaded", function() {
         return rutPattern.test(rut);
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById("rut").addEventListener("blur", function() {
+    var rutInput = this.value;
+    
+    var rutLimpio = limpiarRut(rutInput); // Eliminar puntos y guiones
+    
+    if (validarRutChileno(rutLimpio)) {
+        this.value = formatearRut(rutLimpio); // Formatear RUT
+        document.getElementById("rut-error").textContent = "";
+    } else {
+        document.getElementById("rut-error").textContent = "El RUT no es válido.";
+    }
+});
+
+
+function limpiarRut(rut) {
+    return rut.replace(/[\.\-]/g, '');
+}
+
+function validarRutChileno(rut) {
+    if (rut.length < 8 || rut.length > 10) {
+        return false;
+    }
+    
+    var cuerpoRut = rut.slice(0, -1);
+    var digitoVerificador = rut.slice(-1).toUpperCase();
+    
+    var suma = 0;
+    var multiplo = 2;
+    
+    for (var i = cuerpoRut.length - 1; i >= 0; i--) {
+        suma += parseInt(cuerpoRut.charAt(i)) * multiplo;
+        multiplo = multiplo < 7 ? multiplo + 1 : 2;
+    }
+    
+    var resultado = 11 - (suma % 11);
+    resultado = resultado === 11 ? 0 : resultado;
+    resultado = resultado === 10 ? 'K' : resultado.toString();
+    
+    return resultado === digitoVerificador;
+}
+
+function formatearRut(rut) {
+    var cuerpo = rut.slice(0, -1);
+    var digitoVerificador = rut.slice(-1);
+    var rutFormateado = cuerpo.split('').reverse().join('').match(/.{1,3}/g).join('.').split('').reverse().join('') + '-' + digitoVerificador;
+    return rutFormateado;
+}
+
+document.getElementById("telefono").addEventListener("input", function () {
+    const telefonoInput = this.value;
+    const telefonoError = document.getElementById("telefono-error");
+    const phoneNumberPattern = /^[0-9]{9}$/;
+
+    if (!phoneNumberPattern.test(telefonoInput)) {
+        telefonoError.textContent = "Error.";
+    } else {
+        telefonoError.textContent = "";
+    }
+});
