@@ -6,30 +6,6 @@ from datetime import datetime
 from django.db.models import Q
 import pytz
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
-from .forms import ClienteRegistrationForm 
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
-
-
-def registro_dueno(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            
-            # Crea una instancia de Dueño y asocia al usuario
-            dueno = Dueno.objects.create(user=user)
-            
-            login(request, user)
-            return redirect('dashboard_dueno')  # Redirige al panel de dueño
-    else:
-        form = UserCreationForm()
-    return render(request, 'buscar_estacionamiento/registro_dueno.html', {'form': form})
-
 
 
 def buscar_estacionamiento(request):
