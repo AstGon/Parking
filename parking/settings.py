@@ -48,7 +48,8 @@ ROOT_URLCONF = 'parking.urls'
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        'DIRS': [os.path.join(BASE_DIR, "buscar_estacionamiento/templates")],
+        'DIRS': [os.path.join(BASE_DIR, "buscar_estacionamiento/templates"), os.path.join(BASE_DIR, 'templates'),],
+        
         "APP_DIRS": True,
         'OPTIONS': {
             'context_processors': [
@@ -116,10 +117,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Directorio del proyecto
     os.path.join(BASE_DIR, 'buscar_estacionamiento', 'static'),  # Directorio de la aplicación
 ]
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -130,7 +130,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.AllowAllUsersModelBackend',  # Para permitir autenticación por correo electrónico
 ]
 
-LOGIN_URL = 'login.htm'
+LOGIN_URL = 'login.html'
 
 AUTHENTICATION_BACKENDS = ['buscar_estacionamiento.custom_auth.EmailBackend']
 

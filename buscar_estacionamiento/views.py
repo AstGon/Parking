@@ -1,12 +1,23 @@
-from pyexpat.errors import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
+from django.contrib import messages
 from django.shortcuts import redirect, render
-from .models import Estacionamiento, Arrendamiento,Dueno,Cliente,User
+from .models import Estacionamiento, Arrendamiento,Dueno,Cliente
 from datetime import datetime
 from django.db.models import Q
 import pytz
+from .forms import ClienteRegistrationForm,DuenoRegistrationForm,ClienteRegistrationForm
+from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
-from .forms import ClienteRegistrationForm, DuenoRegistrationForm,ClienteRegistrationForm
+from django.contrib.auth.decorators import login_required
+
+User = get_user_model()
+
+@login_required
+
+def login_view(request):
+    return render(request, 'registration/login',{})
+
+
 
 def cliente_register(request):
     if request.method == 'POST':
@@ -14,7 +25,7 @@ def cliente_register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('buscar_estacionamiento/buscar_estacionmiento.html')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
+            return redirect('buscar_estacionamiento/buscar.html')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
     else:
         form = ClienteRegistrationForm()
     return render(request, 'buscar_estacionamiento/registro_cliente.html', {'form': form})
@@ -25,7 +36,7 @@ def dueno_register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('buscar_estacionamiento/buscar_estacionmiento')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
+            return redirect('buscar_estacionamiento/buscar')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
     else:
         form = DuenoRegistrationForm()
     return render(request, 'buscar_estacionamiento/registro_dueno.html', {'form': form})
@@ -33,9 +44,7 @@ def dueno_register(request):
 
 
 
-
-
-def buscar_estacionamiento(request):
+def buscar(request):
     if request.method == 'POST':
         comuna = request.POST.get('comuna')
         fecha_inicio = request.POST.get('fecha_inicio')
@@ -88,4 +97,4 @@ def buscar_estacionamiento(request):
             'horas_totales': horas_totales,
             'costo_por_hora': costo_por_hora,
         })
-    return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
+    return render(request, 'buscar_estacionamiento/buscar.html')

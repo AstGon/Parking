@@ -1,13 +1,10 @@
-from django.urls import path
 
-from buscar_estacionamiento import views
+from django.contrib import admin
+from django.urls import path, include
 
 
 urlpatterns = [
-    path('buscar_estacionamiento/', views.buscar_estacionamiento, name='buscar_estacionamiento'),
-    path('login/', views.login, name='login'),
-    path('cliente/register/', views.cliente_register, name='cliente_register'),
-    path('dueno/register/', views.dueno_register, name='dueno_register'),
+    path("admin/", admin.site.urls),
+    path("buscar_estacionamiento/", include("buscar_estacionamiento.urls")),
+    path("buscar_estacionamiento/",include('django.contrib.auth.urls')),
 ]
-
-
