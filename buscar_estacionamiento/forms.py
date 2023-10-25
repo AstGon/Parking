@@ -1,6 +1,8 @@
+from imaplib import _Authenticator
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Cliente,Dueno, Comuna
+from django.contrib.auth.forms import AuthenticationForm
 
 class DuenoRegistrationForm(UserCreationForm):
     # Agregar campos específicos de Dueno aquí
@@ -27,3 +29,7 @@ class ClienteRegistrationForm(UserCreationForm):
     class Meta:
         model = Cliente
         fields = ('email', 'password1', 'password2', 'nombre', 'apellido', 'rut', 'telefono', 'direccion', 'comuna')        
+
+class LoginForm(AuthenticationForm):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)

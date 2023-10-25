@@ -9,15 +9,28 @@ from .forms import ClienteRegistrationForm,DuenoRegistrationForm,ClienteRegistra
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from .forms import LoginForm
 
 User = get_user_model()
 
 @login_required
 
 def login_view(request):
-    return render(request, 'registration/login',{})
+    if request.method == 'POST':
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']  # El campo 'username' debe contener el correo electrónico
+            password = form.cleaned_data['password']
+            
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                # Redirige a la página deseada después del inicio de sesión
+                return redirect('buscar')
+    else:
+        form = LoginForm()
 
-
+    return render(request, 'login.html', {'form': form})
 
 def cliente_register(request):
     if request.method == 'POST':
