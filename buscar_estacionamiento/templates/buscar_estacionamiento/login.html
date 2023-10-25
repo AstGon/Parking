@@ -7,16 +7,17 @@
     <title>Iniciar Sesión</title>
 </head>
 <body>
-    <h2>Iniciar Sesión</h2>
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        {{ form.email.label_tag }}
-        {{ form.email }}
-        {{ form.password.label_tag }}
-        {{ form.password }}
-        <button type="submit">Iniciar Sesión</button>
-    </form>
+    <div class="login bg-light rounded shadow-sm">
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{ form.email.label_tag }} <!-- Esto muestra la etiqueta del campo Email -->
+            {{ form.email }} <!-- Esto muestra el campo Email -->
+            {{ form.password.label_tag }} <!-- Esto muestra la etiqueta del campo Contraseña -->
+            {{ form.password }} <!-- Esto muestra el campo Contraseña -->
+            <input type="submit" value="Iniciar sesión">
+        </form>
+        
+    </div>
 </body>
 </html>
-
 {% endblock %}

@@ -1,8 +1,10 @@
+from multiprocessing import AuthenticationError
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Cliente,Dueno, Comuna
 from django.contrib.auth.forms import AuthenticationForm
-from .models import CustomUser  # Asegúrate de ajustar la importación según la ubicación de tu modelo
+
+
 
 
 class DuenoRegistrationForm(UserCreationForm):
@@ -31,7 +33,14 @@ class ClienteRegistrationForm(UserCreationForm):
         model = Cliente
         fields = ('email', 'password1', 'password2', 'nombre', 'apellido', 'rut', 'telefono', 'direccion', 'comuna')        
 
-class CustomAuthenticationForm(AuthenticationForm):
-    class Meta:
-        model = CustomUser  # Usa el nombre de tu modelo de usuario personalizado
-        fields = ('email', 'password')  # Lista de campos para autenticación
+
+
+class CustomLoginForm(AuthenticationForm):
+    email = forms.EmailField(
+        label="Email",
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    password = forms.CharField(
+        label="Contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )

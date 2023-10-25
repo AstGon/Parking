@@ -1,22 +1,41 @@
-from pyexpat.errors import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
-from .models import Estacionamiento, Arrendamiento,Dueno,Cliente
+from .models import CustomUser, Estacionamiento, Arrendamiento,Dueno,Cliente
 from datetime import datetime
 from django.db.models import Q
 import pytz
-from django.shortcuts import render, redirect
-from .forms import ClienteRegistrationForm, CustomAuthenticationForm, DuenoRegistrationForm,ClienteRegistrationForm
-from django.contrib.auth.views import LoginView
+from .forms import ClienteRegistrationForm,DuenoRegistrationForm,ClienteRegistrationForm,CustomLoginForm
 from django.contrib.auth import get_user_model
+from django.shortcuts import render, redirect
 
 User = get_user_model()
 
+def login_view(request):
+    if request.method == 'POST':
+        form = CustomLoginForm(data=request.POST)
+        if form.is_valid():
+            print("entro")
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request, user)
+                # Redirigir a la página deseada después del inicio de sesión
+                return redirect('buscar_estacionamiento/buscar_estacionamiento.html')
+            else:
+                # Manejar error de autenticación
+                print("Error de autenticación")
+                return render(request, 'buscar_estacionamiento/login.html', {'form': form, 'error_message': 'Credenciales inválidas'})
+
+    else:
+        form = CustomLoginForm()
+
+    return render(request, 'buscar_estacionamiento/login.html', {'form': form})
 
 
 def cliente_register(request):
     if request.method == 'POST':
+    
         form = ClienteRegistrationForm(request.POST)
         if form.is_valid():
             # Crear una instancia de Cliente
@@ -28,28 +47,33 @@ def cliente_register(request):
             # Completa otros campos específicos de Cliente
 
             login(request, user)
-            return redirect('ruta_de_redireccion_cliente')
+            return redirect('buscar_estacionamiento/buscar_estacionamiento.html')
     else:
         form = ClienteRegistrationForm()
     return render(request, 'buscar_estacionamiento/registro_cliente.html', {'form': form})
+
+
+
 
 def dueno_register(request):
     if request.method == 'POST':
         form = DuenoRegistrationForm(request.POST)
         if form.is_valid():
-            # Crear una instancia de Dueno
+            # Crear una instancia de Cliente
             user = form.save(commit=False)  # Guarda el formulario sin guardar en la base de datos
             user.save()
-            dueno = Dueno.objects.create(user=user)  # Crea una instancia de Dueno relacionada
-            # Asigna otros campos específicos de Dueno
-            dueno.nombre = form.cleaned_data['nombre']
-            # Completa otros campos específicos de Dueno
+            cliente = Dueno.objects.create(user=user)  # Crea una instancia de Cliente relacionada
+            # Asigna otros campos específicos de Cliente
+            cliente.nombre = form.cleaned_data['nombre']
+            # Completa otros campos específicos de Cliente
 
             login(request, user)
-            return redirect('ruta_de_redireccion_dueno')
+            return redirect('buscar_estacionamiento/buscar_estacionamiento.html')
     else:
-        form = DuenoRegistrationForm()
-    return render(request, 'buscar_estacionamiento/registro_dueno.html', {'form': form})
+        form = ClienteRegistrationForm()
+    return render(request, 'buscar_estacionamiento/registro_cliente.html', {'form': form})
+
+
 
 
 
@@ -108,9 +132,3 @@ def buscar_estacionamiento(request):
             'costo_por_hora': costo_por_hora,
         })
     return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
-
-
-class CustomLoginView(LoginView):
-    template_name = 'buscar_estacionamiento/login.html'
-    form_class = CustomAuthenticationForm  # Usa tu formulario personalizado
-    success_url = reverse_lazy('buscar_estacionamiento')

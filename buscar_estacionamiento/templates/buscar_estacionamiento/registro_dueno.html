@@ -4,13 +4,13 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <h2 style="margin-top: 50px; color: #4300BE;">Registro de Cliente</h2>
-            <form method="post" action="{% url 'cliente_register' %}">
+            <h2 style="margin-top: 50px; color: #4300BE;">Registro de Dueño</h2>
+            <form method="post" action="{% url 'dueno_register' %}">
                 {% csrf_token %}
                 {{ form.as_p }}
             
                 <button type="submit" class="btn" style="margin-top: 20px; float: right;">
-                    Registro de Cliente
+                    Registro de Dueño
                 </button>
             </form>
             
