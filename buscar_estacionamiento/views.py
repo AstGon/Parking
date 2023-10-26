@@ -1,40 +1,63 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
+from django.contrib import messages
 from django.shortcuts import redirect, render
-from .models import Estacionamiento, Arrendamiento
+from .models import Estacionamiento, Arrendamiento,Dueno,Cliente
 from datetime import datetime
 from django.db.models import Q
 import pytz
-from decimal import Decimal
+from .forms import ClienteRegistrationForm,DuenoRegistrationForm,ClienteRegistrationForm
+from django.contrib.auth import get_user_model
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import LoginForm
 
+User = get_user_model()
 
-def login(request):
-    error_message = None  # Inicializa la variable error_message
+@login_required
+
+def login_view(request):
     if request.method == 'POST':
-        email = request.POST['email']
-        contraseña = request.POST['password']
-        user = authenticate(request, email=email, password=contraseña)
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']  # El campo 'username' debe contener el correo electrónico
+            password = form.cleaned_data['password']
+            
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                # Redirige a la página deseada después del inicio de sesión
+                return redirect('buscar')
+    else:
+        form = LoginForm()
 
-        if user is not None:
+    return render(request, 'login.html', {'form': form})
+
+def cliente_register(request):
+    if request.method == 'POST':
+        form = ClienteRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
             login(request, user)
-            # El inicio de sesión fue exitoso
-            return redirect('pagina_de_inicio')  # Redirige a la página de inicio
-        else:
-            # El inicio de sesión ha fallado, puedes mostrar un mensaje de error
-            error_message = "El inicio de sesión ha fallado. Verifica tus credenciales."
+            return redirect('buscar_estacionamiento/buscar.html')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
+    else:
+        form = ClienteRegistrationForm()
+    return render(request, 'buscar_estacionamiento/registro_cliente.html', {'form': form})
 
-    return render(request, 'buscar_estacionamiento/login.html', {'error_message': error_message})
+def dueno_register(request):
+    if request.method == 'POST':
+        form = DuenoRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('buscar_estacionamiento/buscar')  # Cambia 'pagina_de_inicio' por la URL a la que quieres redirigir al usuario después del registro
+    else:
+        form = DuenoRegistrationForm()
+    return render(request, 'buscar_estacionamiento/registro_dueno.html', {'form': form})
 
 
-def registro_usuario(request):
-    return render(request, 'buscar_estacionamiento/registro_usuario.html')
 
 
-
-def tipousuario(request):
-    return render(request, 'buscar_estacionamiento/tipousuario.html')
-
-
-def buscar_estacionamiento(request):
+def buscar(request):
     if request.method == 'POST':
         comuna = request.POST.get('comuna')
         fecha_inicio = request.POST.get('fecha_inicio')
@@ -87,4 +110,4 @@ def buscar_estacionamiento(request):
             'horas_totales': horas_totales,
             'costo_por_hora': costo_por_hora,
         })
-    return render(request, 'buscar_estacionamiento/buscar_estacionamiento.html')
+    return render(request, 'buscar_estacionamiento/buscar.html')

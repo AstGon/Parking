@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <form method="post" action="{% url 'buscar_estacionamiento' %}">
+    <form method="post" action="{% url 'buscar' %}">
         {% csrf_token %}
         <div class="row">
             <div class="col-md-12">

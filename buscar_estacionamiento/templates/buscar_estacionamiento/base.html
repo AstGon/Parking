@@ -1,6 +1,4 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +14,7 @@
 
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'buscar_estacionamiento' %}">
+            <a class="navbar-brand" href="{% url 'buscar' %}">
                 <img src="{% static 'buscar_estacionamiento/img/Logo.png' %}" alt="Logo" width="40" height="50" class="d-inline-block align-text-top">
                 <span style="color: white;">Cliente</span>
             </a>
@@ -34,19 +32,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Mi Perfil</a>
                     </li>
-                    {% if user.is_authenticated and user.dueno %}
+                   
                     <!-- Mostrar "Mis Arriendos" solo a los dueños -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'mis_arriendos' %}">Mis Arriendos</a>
+                        <a class="nav-link" href="">Mis Arriendos</a>
                     </li>
-                    {% endif %}
-                    
-                    {% if user.is_authenticated and user.cliente %}
+                  
+                  
                     <!-- Mostrar "Mis Reservas" solo a los clientes -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'mis_reservas' %}">Mis Reservas</a>
+                        <a class="nav-link" href="">Mis Reservas</a>
                     </li>
-                    {% endif %}
+                
                     <li class="nav-item">
                         <a class="nav-link" href="#">Ayuda</a>
                     </li>                
@@ -64,4 +61,4 @@
     
     <script src="{% static 'buscar_estacionamiento/javascript.js' %}"></script>
 </body>
-</html>
+
