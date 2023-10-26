@@ -31,5 +31,6 @@ class ClienteRegistrationForm(UserCreationForm):
         fields = ('email', 'password1', 'password2', 'nombre', 'apellido', 'rut', 'telefono', 'direccion', 'comuna')        
 
 class LoginForm(AuthenticationForm):
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    # Define los campos email y password para el formulario
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True)
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), required=True)

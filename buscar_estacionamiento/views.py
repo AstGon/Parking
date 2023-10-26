@@ -17,20 +17,27 @@ User = get_user_model()
 
 def login_view(request):
     if request.method == 'POST':
+        print("Vista de inicio de sesión ejecutada")
         form = LoginForm(request, data=request.POST)
+        print("Antes de la validación del formulario")
         if form.is_valid():
-            username = form.cleaned_data['username']  # El campo 'username' debe contener el correo electrónico
+            print("Formulario válido")
+            username = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            
             user = authenticate(request, username=username, password=password)
             if user is not None:
+                print("Usuario autenticado")
                 login(request, user)
-                # Redirige a la página deseada después del inicio de sesión
                 return redirect('buscar')
+            else:
+                print("Error de autenticación")
+        else:
+            print("Formulario no válido")
     else:
         form = LoginForm()
 
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'registration/login.html', {'form': form})
+
 
 def cliente_register(request):
     if request.method == 'POST':

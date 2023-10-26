@@ -22,16 +22,9 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser debe tener is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser debe tener is_superuser=True.')
-
-        return self.create_user(email, password, **extra_fields)
+    def create_superuser(self, email, password, **extra_fields):
+        user=self._create_user(email, password, True, True, **extra_fields)
+        return user
 
 # Define un modelo de usuario personalizado
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -48,10 +41,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
+    EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    def __str__(self):
-        return self.email
+    def get_absolute_url(self):
+        return "/users/%i/" % (self.pk)
 
 # Define modelos para grupos y permisos
 class CustomGroup(Group):
@@ -89,7 +83,7 @@ class Vehiculo(models.Model):
 
 class Estacionamiento(models.Model):
     direccion = models.CharField(max_length=200)
-    dueño = models.ForeignKey(Dueno, on_delete=models.CASCADE)
+    dueno = models.ForeignKey(Dueno, on_delete=models.CASCADE)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
     costo_por_hora = models.IntegerField(default=0)
 

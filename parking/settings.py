@@ -117,7 +117,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'buscar_estacionamiento', 'static'),  # Directorio de la aplicación
+    os.path.join(BASE_DIR, 'app', 'static'),  # Directorio de la aplicación
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  
 # Default primary key field type
@@ -135,3 +135,5 @@ LOGIN_URL = 'login.html'
 AUTHENTICATION_BACKENDS = ['buscar_estacionamiento.custom_auth.EmailBackend']
 
 AUTH_USER_MODEL = 'buscar_estacionamiento.CustomUser'
+
+LOGIN_REDIRECT_URL = "/"
